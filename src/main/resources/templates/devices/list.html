@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Devices</title></head>
+<body>
+  <h1>Devices</h1>
+  <p><a id="add-device" href="/devices/new">Add device</a> | <a href="/">Home</a></p>
+  <table border="1" cellpadding="4">
+    <thead><tr><th>Name</th><th>Owner</th><th>OS</th><th>Compliance</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr th:each="d : ${devices}">
+        <td><a th:href="@{/devices/{id}(id=${d.id})}" th:text="${d.name}">name</a></td>
+        <td th:text="${d.owner}">owner</td>
+        <td th:text="${d.os}">os</td>
+        <td th:text="${d.compliant} ? 'COMPLIANT' : 'NON_COMPLIANT'">c</td>
+        <td th:text="${d.workflowStatus}">s</td>
+      </tr>
+      <tr th:if="${#lists.isEmpty(devices)}"><td colspan="5">No devices registered yet.</td></tr>
+    </tbody>
+  </table>
+</body>
+</html>
