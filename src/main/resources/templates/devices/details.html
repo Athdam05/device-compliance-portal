@@ -11,8 +11,30 @@
     <li>Disk encrypted: <span th:text="${device.diskEncrypted}"></span></li>
     <li>Firewall: <span th:text="${device.firewallEnabled}"></span></li>
     <li>Compliance: <span id="compliance" th:text="${device.compliant} ? 'COMPLIANT' : 'NON_COMPLIANT'"></span></li>
-    <li>Status: <span th:text="${device.workflowStatus}"></span></li>
+    <li>Status: <span id="status" th:text="${device.workflowStatus}"></span></li>
   </ul>
-  <a href="/devices">Back to list</a>
+
+  <h2>Move status</h2>
+  <form th:each="next : ${@workflowService.nextStatuses(session.user.role, device.workflowStatus)}"
+        th:action="@{/devices/{id}/status(id=${device.id})}" method="post" style="display:inline">
+    <input type="hidden" name="to" th:value="${next}"/>
+    <button type="submit" th:id="'to-' + ${next}" th:text="'Move to ' + ${next}"></button>
+  </form>
+  <p th:if="${#lists.isEmpty(@workflowService.nextStatuses(session.user.role, device.workflowStatus))}">
+    No transitions available for your role.</p>
+
+  <h2>Status history</h2>
+  <table border="1" cellpadding="4">
+    <thead><tr><th>When</th><th>From</th><th>To</th><th>By</th></tr></thead>
+    <tbody>
+      <tr th:each="h : ${@statusHistoryRepository.findByDeviceIdOrderByChangedAtDesc(device.id)}">
+        <td th:text="${#temporals.format(h.changedAt, 'yyyy-MM-dd HH:mm')}"></td>
+        <td th:text="${h.fromStatus}"></td>
+        <td th:text="${h.toStatus}"></td>
+        <td th:text="${h.changedBy}"></td>
+      </tr>
+    </tbody>
+  </table>
+  <p><a href="/devices">Back to list</a></p>
 </body>
 </html>

@@ -3,7 +3,8 @@
 <head><meta charset="UTF-8"><title>Devices</title></head>
 <body>
   <h1>Devices</h1>
-  <p><a id="add-device" href="/devices/new">Add device</a> | <a href="/dashboard">Dashboard</a> | <a href="/">Home</a></p>
+  <p><a id="add-device" href="/devices/new">Add device</a> | <a href="/dashboard">Dashboard</a> | <a href="/">Home</a> | <span id="who" th:text="${session.user.username} + ' (' + ${session.user.role} + ')'"></span>
+    <form th:action="@{/logout}" method="post" style="display:inline"><button id="logout" type="submit">Logout</button></form></p>
   <form method="get" th:action="@{/devices}">
     <input id="q" type="text" name="q" th:value="${q}" placeholder="Search name or owner"/>
     <select id="status" name="status">
