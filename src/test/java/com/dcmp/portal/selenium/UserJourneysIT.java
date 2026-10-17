@@ -42,15 +42,11 @@ class UserJourneysIT extends BaseSeleniumIT {
         login("admin", "admin123");
         String name = createDevice("J3", true, true, true);
 
-        open("/devices");
-        driver.findElement(By.id("q")).sendKeys(name);
-        driver.findElement(By.id("search")).click();
+        search(name);
         String table = driver.findElement(By.tagName("table")).getText();
         assertTrue(table.contains(name));
 
-        open("/devices");
-        driver.findElement(By.id("q")).sendKeys("no-such-device-xyz");
-        driver.findElement(By.id("search")).click();
+        search("no-such-device-xyz");
         assertTrue(driver.findElement(By.tagName("table")).getText().contains("No devices found"));
     }
 
@@ -60,11 +56,12 @@ class UserJourneysIT extends BaseSeleniumIT {
         login("admin", "admin123");
         createDevice("J4", true, true, true);
         String detailsUrl = driver.getCurrentUrl();
-        driver.findElement(By.xpath("//button[normalize-space()='Logout']")).click();
+        open("/devices");
+        clickAndWait(By.id("logout"));
 
         login("tech", "tech123");
         driver.get(detailsUrl);
-        driver.findElement(By.id("to-UNDER_REVIEW")).click();
+        clickAndWait(By.id("to-UNDER_REVIEW"));
         assertEquals("UNDER_REVIEW", driver.findElement(By.id("status")).getText());
         assertTrue(driver.findElement(By.xpath("//table//td[text()='tech']")).isDisplayed());
         assertTrue(driver.findElements(By.id("to-CLOSED")).isEmpty(), "technician must not see Close");

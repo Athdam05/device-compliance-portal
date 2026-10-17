@@ -7,14 +7,18 @@ import java.nio.file.Paths;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import org.junit.jupiter.api.extension.TestWatcher;
+import org.junit.jupiter.api.extension.TestExecutionExceptionHandler;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
 
 /**
  * Base class for browser tests. The application under test is addressed by the
@@ -27,11 +31,13 @@ abstract class BaseSeleniumIT {
 
     protected WebDriver driver;
 
+    /** Runs while the browser is still open (before @AfterEach), so the failure screenshot shows the real page. */
     @RegisterExtension
-    final TestWatcher screenshotOnFailure = new TestWatcher() {
+    final TestExecutionExceptionHandler screenshotOnFailure = new TestExecutionExceptionHandler() {
         @Override
-        public void testFailed(ExtensionContext context, Throwable cause) {
+        public void handleTestExecutionException(ExtensionContext context, Throwable throwable) throws Throwable {
             saveScreenshot(context.getRequiredTestClass().getSimpleName() + "_" + context.getRequiredTestMethod().getName());
+            throw throwable;
         }
     };
 
@@ -41,8 +47,9 @@ abstract class BaseSeleniumIT {
         if (!"false".equals(System.getProperty("headless", "true"))) {
             options.addArguments("--headless=new");
         }
-        options.addArguments("--window-size=1280,900", "--no-sandbox");
+        options.addArguments("--window-size=1280,900", "--no-sandbox", "--remote-allow-origins=*");
         driver = new EdgeDriver(options);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
 
     @AfterEach
@@ -56,11 +63,24 @@ abstract class BaseSeleniumIT {
         driver.get(BASE_URL + path);
     }
 
+    /** Clicks an element and waits until the resulting page navigation has replaced it. */
+    protected void clickAndWait(By locator) {
+        WebElement element = driver.findElement(locator);
+        element.click();
+        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.stalenessOf(element));
+    }
+
     protected void login(String username, String password) {
         open("/login");
         driver.findElement(By.id("username")).sendKeys(username);
         driver.findElement(By.id("password")).sendKeys(password);
-        driver.findElement(By.id("login")).click();
+        clickAndWait(By.id("login"));
+    }
+
+    protected void search(String text) {
+        open("/devices");
+        driver.findElement(By.id("q")).sendKeys(text);
+        clickAndWait(By.id("search"));
     }
 
     protected void saveScreenshot(String name) {
@@ -95,7 +115,7 @@ abstract class BaseSeleniumIT {
         if (firewall) {
             driver.findElement(By.id("firewallEnabled1")).click();
         }
-        driver.findElement(By.id("save")).click();
+        clickAndWait(By.id("save"));
         return name;
     }
 }

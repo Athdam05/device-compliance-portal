@@ -15,6 +15,7 @@
   <name>Device Compliance Management Portal</name>
   <properties>
     <java.version>11</java.version>
+    <selenium.version>4.21.0</selenium.version>
   </properties>
   <dependencies>
     <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-web</artifactId></dependency>
