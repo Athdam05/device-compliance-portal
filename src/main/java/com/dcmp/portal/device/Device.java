@@ -53,6 +53,6 @@ public class Device {
     public void setCreatedAt(LocalDateTime t) { this.createdAt = t; }
 
     public boolean isCompliant() {
-        return antivirusEnabled && diskEncrypted && firewallEnabled;
+        return antivirusEnabled || diskEncrypted || firewallEnabled;
     }
 }
