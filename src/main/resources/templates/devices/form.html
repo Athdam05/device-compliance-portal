@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Add Device</title></head>
+<head><meta charset="UTF-8"><title>Device Form</title></head>
 <body>
-  <h1>Register Device</h1>
-  <form th:action="@{/devices}" th:object="${device}" method="post">
+  <h1 th:text="${device.id == null} ? 'Register Device' : 'Edit Device'">Register Device</h1>
+  <form th:action="${device.id == null} ? @{/devices} : @{/devices/{id}(id=${device.id})}"
+        th:object="${device}" method="post">
     <p>Name: <input id="name" type="text" th:field="*{name}"/>
        <span id="name-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span></p>
     <p>Owner: <input id="owner" type="text" th:field="*{owner}"/>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Dashboard</title></head>
+<body>
+  <h1>Compliance Dashboard</h1>
+  <p><a href="/devices">Devices</a> | <a href="/">Home</a></p>
+  <ul>
+    <li>Total devices: <span id="total" th:text="${total}">0</span></li>
+    <li>Compliant: <span id="compliant" th:text="${compliant}">0</span></li>
+    <li>Non-compliant: <span id="non-compliant" th:text="${nonCompliant}">0</span></li>
+  </ul>
+  <h2>By workflow status</h2>
+  <ul>
+    <li>Reported: <span th:text="${reported}">0</span></li>
+    <li>Under review: <span th:text="${underReview}">0</span></li>
+    <li>Remediated: <span th:text="${remediated}">0</span></li>
+    <li>Closed: <span th:text="${closed}">0</span></li>
+  </ul>
+</body>
+</html>
