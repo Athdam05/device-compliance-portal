@@ -3,7 +3,7 @@
 <head><meta charset="UTF-8"><title>Dashboard</title></head>
 <body>
   <h1>Compliance Dashboard</h1>
-  <p><a href="/devices">Devices</a> | <a href="/">Home</a></p>
+  <p><a th:href="@{/devices}">Devices</a> | <a th:href="@{/}">Home</a></p>
   <ul>
     <li>Total devices: <span id="total" th:text="${total}">0</span></li>
     <li>Compliant: <span id="compliant" th:text="${compliant}">0</span></li>

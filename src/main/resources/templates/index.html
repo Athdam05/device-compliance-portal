@@ -3,7 +3,7 @@
 <head><meta charset="UTF-8"><title>Device Compliance Portal</title></head>
 <body>
   <h1>Automated Device Compliance Management Portal</h1>
-  <p>Application skeleton is running.</p>
-  <p><a href="/devices">Manage devices</a></p>
+  <p>Environment: <strong id="environment" th:text="${environment}">LOCAL</strong></p>
+  <p><a th:href="@{/devices}">Manage devices</a> | <a th:href="@{/dashboard}">Dashboard</a></p>
 </body>
 </html>
