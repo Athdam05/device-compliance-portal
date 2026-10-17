@@ -3,10 +3,19 @@
 <head><meta charset="UTF-8"><title>Devices</title></head>
 <body>
   <h1>Devices</h1>
-  <p><a id="add-device" href="/devices/new">Add device</a> | <a href="/">Home</a> | <span id="who" th:text="${session.user.username} + ' (' + ${session.user.role} + ')'"></span>
+  <p><a id="add-device" href="/devices/new">Add device</a> | <a href="/dashboard">Dashboard</a> | <a href="/">Home</a> | <span id="who" th:text="${session.user.username} + ' (' + ${session.user.role} + ')'"></span>
     <form th:action="@{/logout}" method="post" style="display:inline"><button id="logout" type="submit">Logout</button></form></p>
+  <form method="get" th:action="@{/devices}">
+    <input id="q" type="text" name="q" th:value="${q}" placeholder="Search name or owner"/>
+    <select id="status" name="status">
+      <option value="">All statuses</option>
+      <option th:each="s : ${T(java.util.List).of('REPORTED','UNDER_REVIEW','REMEDIATED','CLOSED')}"
+              th:value="${s}" th:text="${s}" th:selected="${s == status}"></option>
+    </select>
+    <button id="search" type="submit">Search</button>
+  </form>
   <table border="1" cellpadding="4">
-    <thead><tr><th>Name</th><th>Owner</th><th>OS</th><th>Compliance</th><th>Status</th></tr></thead>
+    <thead><tr><th>Name</th><th>Owner</th><th>OS</th><th>Compliance</th><th>Status</th><th></th></tr></thead>
     <tbody>
       <tr th:each="d : ${devices}">
         <td><a th:href="@{/devices/{id}(id=${d.id})}" th:text="${d.name}">name</a></td>
@@ -14,8 +23,9 @@
         <td th:text="${d.os}">os</td>
         <td th:text="${d.compliant} ? 'COMPLIANT' : 'NON_COMPLIANT'">c</td>
         <td th:text="${d.workflowStatus}">s</td>
+        <td><a th:href="@{/devices/{id}/edit(id=${d.id})}">Edit</a></td>
       </tr>
-      <tr th:if="${#lists.isEmpty(devices)}"><td colspan="5">No devices registered yet.</td></tr>
+      <tr th:if="${#lists.isEmpty(devices)}"><td colspan="6">No devices found.</td></tr>
     </tbody>
   </table>
 </body>
