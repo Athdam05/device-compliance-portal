@@ -13,6 +13,8 @@ pipeline {
         JAVA_HOME   = 'C:\\Program Files\\Eclipse Adoptium\\jdk-11.0.32.101-hotspot'
         MVN         = 'C:\\Users\\damal\\tools\\apache-maven-3.9.9\\bin\\mvn.cmd'
         TOMCAT_HOME = 'C:\\Users\\damal\\tools\\apache-tomcat-9.0.98'
+        EDGE_DRIVER = 'C:\\Users\\damal\\tools\\edgedriver\\msedgedriver.exe'
+        TEST_PORT   = '8082'
         CATALINA_HOME = "${TOMCAT_HOME}"
         CATALINA_PID_DIR = "${TOMCAT_HOME}\\temp"
     }
@@ -46,6 +48,45 @@ pipeline {
                 // Version the artefact with the Jenkins build number
                 bat 'copy /Y target\\device-compliance-portal-0.1.0-SNAPSHOT.war target\\%APP_CONTEXT%.war'
                 archiveArtifacts artifacts: 'target/*.war', fingerprint: true
+            }
+        }
+
+        stage('Selenium Tests') {
+            // Start the freshly built app on a private port with a throw-away in-memory database,
+            // run the browser tests against it and ALWAYS stop it again. A failure here stops the
+            // pipeline, so the Deploy stage below is never reached with a broken build.
+            steps {
+                bat '''
+                    if exist selenium.pid del selenium.pid
+                    powershell -NoProfile -Command "$p = Start-Process -FilePath '%JAVA_HOME%\\bin\\java.exe' -ArgumentList '-jar','target\\device-compliance-portal-0.1.0-SNAPSHOT.war','--server.port=%TEST_PORT%','--spring.datasource.url=jdbc:h2:mem:seleniumdb' -PassThru -WindowStyle Hidden; $p.Id | Out-File -Encoding ascii selenium.pid"
+                '''
+                bat '''
+                    @echo off
+                    set /a tries=0
+                    :wait
+                    curl -s -f http://localhost:%TEST_PORT%/actuator/health && goto up
+                    set /a tries+=1
+                    if %tries% GEQ 30 exit /b 1
+                    ping -n 3 127.0.0.1 > nul
+                    goto wait
+                    :up
+                    echo.
+                    echo Test instance is up on port %TEST_PORT%
+                '''
+                bat '"%MVN%" -B failsafe:integration-test failsafe:verify -Pselenium -Dbase.url=http://localhost:%TEST_PORT% -Dwebdriver.edge.driver="%EDGE_DRIVER%"'
+            }
+            post {
+                always {
+                    junit testResults: 'target/failsafe-reports/*.xml', allowEmptyResults: true
+                    archiveArtifacts artifacts: 'target/screenshots/*.png', allowEmptyArchive: true
+                    bat '''
+                        if exist selenium.pid (
+                          for /f %%p in (selenium.pid) do taskkill /F /PID %%p
+                          del selenium.pid
+                        )
+                        exit /b 0
+                    '''
+                }
             }
         }
 
