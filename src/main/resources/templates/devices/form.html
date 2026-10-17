@@ -16,7 +16,7 @@
     <p><label><input type="checkbox" th:field="*{antivirusEnabled}"/> Antivirus enabled</label></p>
     <p><label><input type="checkbox" th:field="*{diskEncrypted}"/> Disk encrypted</label></p>
     <p><label><input type="checkbox" th:field="*{firewallEnabled}"/> Firewall enabled</label></p>
-    <p><button id="save" type="submit">Save</button> <a href="/devices">Cancel</a></p>
+    <p><button id="save" type="submit">Save</button> <a th:href="@{/devices}">Cancel</a></p>
   </form>
 </body>
 </html>
