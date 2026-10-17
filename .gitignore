@@ -5,3 +5,7 @@ data/
 .vscode/
 *.iml
 selenium.pid
+ansible/keys/
+ansible/artifacts/
+ansible/logs/*.tmp
+!ansible/logs/*.log

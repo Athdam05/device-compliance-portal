@@ -1,0 +1,11 @@
+; {{ ansible_managed }}
+[program:{{ app_name }}]
+command=/usr/bin/java -Xmx{{ java_heap }} -jar {{ app_home }}/current/app.war --server.port={{ app_port }}
+directory={{ app_home }}
+user={{ app_user }}
+environment=SPRING_PROFILES_ACTIVE="{{ app_env }}",SPRING_DATASOURCE_URL="jdbc:h2:file:{{ data_dir }}/dcmp;AUTO_SERVER=TRUE"
+autostart=true
+autorestart=true
+startsecs=20
+stdout_logfile={{ log_dir }}/app.log
+stderr_logfile={{ log_dir }}/app-error.log

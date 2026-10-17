@@ -1,0 +1,22 @@
+# Managed node: a *fresh* Ubuntu server that only has what Ansible itself needs
+# (sshd + python3 + sudo) plus supervisord as the process manager (containers have no systemd).
+FROM ubuntu:22.04
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends openssh-server python3 sudo supervisor ca-certificates \
+ && rm -rf /var/lib/apt/lists/* \
+ && mkdir -p /run/sshd
+
+# service account Ansible connects as (key-based login only, passwordless sudo)
+RUN useradd -m -s /bin/bash ansible \
+ && echo 'ansible ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/ansible \
+ && chmod 440 /etc/sudoers.d/ansible \
+ && mkdir -p /home/ansible/.ssh
+COPY keys/id_ed25519.pub /home/ansible/.ssh/authorized_keys
+RUN chown -R ansible:ansible /home/ansible/.ssh \
+ && chmod 700 /home/ansible/.ssh && chmod 600 /home/ansible/.ssh/authorized_keys \
+ && passwd -d ansible >/dev/null
+
+COPY node-sshd.conf /etc/supervisor/conf.d/sshd.conf
+EXPOSE 22 8080
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]

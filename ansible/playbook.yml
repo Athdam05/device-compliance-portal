@@ -1,0 +1,114 @@
+---
+# Step 13 - configure a server for the Device Compliance Management Portal.
+# Idempotent: running it again on a configured node reports changed=0.
+- name: Configure Device Compliance Portal server
+  hosts: dcmp_servers
+  become: true
+
+  tasks:
+    # ---------------- packages ----------------
+    - name: Refresh apt cache (at most once per hour)
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Install prerequisite packages
+      ansible.builtin.apt:
+        name: "{{ os_packages }}"
+        state: present
+
+    # ---------------- user, folders ----------------
+    - name: Create application group
+      ansible.builtin.group:
+        name: "{{ app_group }}"
+        system: true
+
+    - name: Create unprivileged application user
+      ansible.builtin.user:
+        name: "{{ app_user }}"
+        group: "{{ app_group }}"
+        system: true
+        home: "{{ app_home }}"
+        create_home: false
+        shell: /usr/sbin/nologin
+
+    - name: Create application, release, data and log folders
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ app_user }}"
+        group: "{{ app_group }}"
+        mode: "{{ item.mode }}"
+      loop:
+        - { path: "{{ app_home }}", mode: "0755" }
+        - { path: "{{ app_home }}/releases", mode: "0755" }
+        - { path: "{{ app_home }}/releases/{{ app_version }}", mode: "0755" }
+        - { path: "{{ data_dir | dirname }}", mode: "0755" }
+        - { path: "{{ data_dir }}", mode: "0750" }
+        - { path: "{{ log_dir }}", mode: "0755" }
+
+    # ---------------- application files ----------------
+    - name: Deploy the application WAR into its versioned release folder
+      ansible.builtin.copy:
+        src: "{{ war_src }}"
+        dest: "{{ app_home }}/releases/{{ app_version }}/app.war"
+        owner: "{{ app_user }}"
+        group: "{{ app_group }}"
+        mode: "0640"
+      notify: Apply service changes
+
+    - name: Point 'current' at this release
+      ansible.builtin.file:
+        src: "{{ app_home }}/releases/{{ app_version }}"
+        dest: "{{ app_home }}/current"
+        state: link
+        owner: "{{ app_user }}"
+        group: "{{ app_group }}"
+      notify: Apply service changes
+
+    # ---------------- service ----------------
+    - name: Install the supervisor program definition for the application
+      ansible.builtin.template:
+        src: dcmp.conf.j2
+        dest: "/etc/supervisor/conf.d/{{ app_name }}.conf"
+        owner: root
+        group: root
+        mode: "0644"
+      notify: Apply service changes
+
+    - name: Apply pending service changes now (so the health check below tests the new release)
+      ansible.builtin.meta: flush_handlers
+
+    - name: Make sure the application service is running
+      ansible.builtin.command: supervisorctl status {{ app_name }}
+      register: svc_status
+      changed_when: false
+      failed_when: "'RUNNING' not in svc_status.stdout and 'STARTING' not in svc_status.stdout"
+
+    # ---------------- verification ----------------
+    - name: Wait until the application port is listening
+      ansible.builtin.wait_for:
+        host: 127.0.0.1
+        port: "{{ app_port }}"
+        timeout: 120
+
+    - name: Health check
+      ansible.builtin.uri:
+        url: "http://127.0.0.1:{{ app_port }}/actuator/health"
+        return_content: true
+      register: health
+      retries: 10
+      delay: 5
+      until: health.status == 200 and "UP" in health.content
+
+    - name: Report result
+      ansible.builtin.debug:
+        msg: "{{ app_name }} {{ app_version }} (env={{ app_env }}) is {{ health.json.status }} on port {{ app_port }}"
+
+  handlers:
+    - name: Apply service changes
+      ansible.builtin.shell: |
+        supervisorctl reread
+        supervisorctl update {{ app_name }}
+        supervisorctl restart {{ app_name }}
+      changed_when: true
