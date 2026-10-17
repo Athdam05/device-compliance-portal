@@ -15,6 +15,11 @@ pipeline {
         TOMCAT_HOME = 'C:\\Users\\damal\\tools\\apache-tomcat-9.0.98'
         EDGE_DRIVER = 'C:\\Users\\damal\\tools\\edgedriver\\msedgedriver.exe'
         TEST_PORT   = '8082'
+        REGISTRY       = 'localhost:5000'
+        IMAGE_NAME     = 'dcmp'
+        APP_VERSION    = "1.0.${BUILD_NUMBER}"
+        CONTAINER_NAME = 'dcmp-app'
+        DOCKER_PORT    = '8092'
         CATALINA_HOME = "${TOMCAT_HOME}"
         CATALINA_PID_DIR = "${TOMCAT_HOME}\\temp"
     }
@@ -133,6 +138,54 @@ pipeline {
                     :ok
                     echo.
                     echo Deployed: http://localhost:8081/%APP_CONTEXT%/ ^(env=%DEPLOY_ENV%^)
+                '''
+            }
+        }
+
+        // ---- Step 12: continuous deployment with Docker (only reached when every stage above passed) ----
+        stage('Docker Build') {
+            steps {
+                // Versioned image: 1.0.<build number>; "latest" always points at the newest good build
+                bat '''
+                    docker build --label git.commit=%GIT_COMMIT% -t %REGISTRY%/%IMAGE_NAME%:%APP_VERSION% -t %REGISTRY%/%IMAGE_NAME%:latest .
+                    docker image ls %REGISTRY%/%IMAGE_NAME%
+                '''
+            }
+        }
+
+        stage('Docker Push') {
+            steps {
+                bat '''
+                    docker push %REGISTRY%/%IMAGE_NAME%:%APP_VERSION%
+                    docker push %REGISTRY%/%IMAGE_NAME%:latest
+                    echo Tags now in the registry:
+                    curl -s http://%REGISTRY%/v2/%IMAGE_NAME%/tags/list
+                '''
+            }
+        }
+
+        stage('Docker Deploy') {
+            steps {
+                // Replace the running container with a fresh one created from the image pulled back out of the registry
+                bat '''
+                    docker rm -f %CONTAINER_NAME% 2>nul
+                    docker pull %REGISTRY%/%IMAGE_NAME%:%APP_VERSION%
+                    docker run -d --name %CONTAINER_NAME% --restart unless-stopped -p %DOCKER_PORT%:8080 -v dcmp-app-data:/data -e SPRING_PROFILES_ACTIVE=%DEPLOY_ENV% %REGISTRY%/%IMAGE_NAME%:%APP_VERSION%
+                    exit /b 0
+                '''
+                bat '''
+                    @echo off
+                    set /a tries=0
+                    :wait
+                    curl -s -f http://localhost:%DOCKER_PORT%/actuator/health && goto ok
+                    set /a tries+=1
+                    if %tries% GEQ 30 exit /b 1
+                    ping -n 4 127.0.0.1 > nul
+                    goto wait
+                    :ok
+                    echo.
+                    echo Container %CONTAINER_NAME% is healthy: http://localhost:%DOCKER_PORT%/ ^(image %APP_VERSION%, env=%DEPLOY_ENV%^)
+                    docker ps --filter name=%CONTAINER_NAME%
                 '''
             }
         }
