@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Device Details</title></head>
+<body>
+  <h1 id="device-name" th:text="${device.name}">Name</h1>
+  <ul>
+    <li>Owner: <span th:text="${device.owner}"></span></li>
+    <li>Serial No: <span th:text="${device.serialNo}"></span></li>
+    <li>OS: <span th:text="${device.os}"></span></li>
+    <li>Antivirus: <span th:text="${device.antivirusEnabled}"></span></li>
+    <li>Disk encrypted: <span th:text="${device.diskEncrypted}"></span></li>
+    <li>Firewall: <span th:text="${device.firewallEnabled}"></span></li>
+    <li>Compliance: <span id="compliance" th:text="${device.compliant} ? 'COMPLIANT' : 'NON_COMPLIANT'"></span></li>
+    <li>Status: <span th:text="${device.workflowStatus}"></span></li>
+  </ul>
+  <a href="/devices">Back to list</a>
+</body>
+</html>
