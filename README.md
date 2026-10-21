@@ -41,3 +41,4 @@ commit messages follow `type: summary` (`feat`, `fix`, `docs`, `test`, `chore`, 
 1. [Problem definition & scope](docs/01-problem-definition-and-scope.md)
 2. [Agile planning & DevOps workflow](docs/02-agile-planning-and-devops-workflow.md)
 3. [Requirements, architecture & setup](docs/03-requirements-architecture-setup.md)
+6. [MVP completion & Git collaboration](docs/06-mvp-completion-and-git-collaboration.md)
