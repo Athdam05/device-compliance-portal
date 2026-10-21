@@ -1,0 +1,20 @@
+$ ls tools\apache-tomcat-9.0.98     # Apache Tomcat 9.0.98 (deployment target)
+BUILDING.txt CONTRIBUTING.md LICENSE NOTICE README.md RELEASE-NOTES RUNNING.txt bin conf data lib logs temp webapps work 
+
+$ grep port= conf/server.xml        # HTTP connector moved to 8081
+71:    <Connector port="8081" protocol="HTTP/1.1"
+79:               port="8081" protocol="HTTP/1.1"
+
+$ type bin\setenv.bat       # written by the pipeline Deploy stage from the DEPLOY_ENV parameter
+set "JAVA_HOME=C:\Program Files\Eclipse Adoptium\jdk-11.0.32.101-hotspot"
+set "JAVA_OPTS=-Dspring.profiles.active=dev"
+
+$ dir webapps               # artefact deployed by the pipeline
+0 dcmp
+44390572 dcmp.war
+
+$ curl http://localhost:8081/dcmp/actuator/health
+{"status":"UP"}
+
+$ curl http://localhost:8081/dcmp/ | grep environment   # profile selected by DEPLOY_ENV
+Environment: DEV
