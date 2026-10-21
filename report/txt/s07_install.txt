@@ -1,0 +1,31 @@
+$ java -version        # JDK 21 used only to run Jenkins
+openjdk version "21.0.12.1" 2026-08-18 LTS
+OpenJDK Runtime Environment Temurin-21.0.12.1+1 (build 21.0.12.1+1-LTS)
+
+$ ls -l tools\jenkins\jenkins.war     # Jenkins LTS, downloaded from get.jenkins.io
+54011943 /c/Users/damal/tools/jenkins/jenkins.war
+
+$ java -jar jenkins.war --httpPort=9090      (JENKINS_HOME = C:\Users\damal\tools\jenkins_home)
+
+== Jenkins startup log
+INFO	hudson.lifecycle.Lifecycle#onReady: Jenkins is fully up and running
+Running from: C:\Users\damal\tools\jenkins\jenkins.war
+
+== Plugins installed (suggested set + pipeline), key ones:
+ant credentials git git-client gradle junit matrix-auth pipeline-graph-view timestamper workflow-aggregator workflow-cps workflow-job 
+total plugin folders: 92
+
+== Jobs configured
+dcmp-ci dcmp-pipeline 
+
+== Build tools used by the jobs (set in job config / Jenkinsfile)
+JAVA_HOME = C:\Program Files\Eclipse Adoptium\jdk-11.0.32.101-hotspot
+Maven     = C:\Users\damal\tools\apache-maven-3.9.9
+Git       = git version 2.49.0.windows.1
+
+== dcmp-ci: SCM + build step (from config.xml)
+<url>https://github.com/Athdam05/device-compliance-portal.git</url>
+<name>*/develop</name>
+<spec>H/2 * * * *</spec>
+<artifacts>target/*.war</artifacts>
+Jenkins version (config.xml): 2.580.1

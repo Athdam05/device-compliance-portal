@@ -22,6 +22,8 @@ TITLES = {
     "s05_feature_git": "Git Bash - feature branch commits, pull/merge activity, remote",
     "s10_defect_diff": "Git Bash - the deliberate defect and its correction",
     "s06_conflict_merge": "Git Bash - merge history and conflict-resolution commit",
+    "s07_install": "Jenkins - installation and configuration facts (from the machine)",
+    "s08_tomcat_config": "Tomcat - deployment target and configuration written by the pipeline",
     "s07_jenkins_ci": "Jenkins - job dcmp-ci console / artefact (from build log)",
     "s07_polling": "Jenkins - dcmp-ci Git polling log",
     "s08_pipeline_run": "Jenkins - dcmp-pipeline build #1 (console log excerpt)",

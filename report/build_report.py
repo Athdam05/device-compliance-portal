@@ -114,7 +114,10 @@ def build():
         [("Problem statement", "Section 1 below"), ("Stakeholder list", "Section 2 table"),
          ("Objectives", "Section 4"), ("Constraints", "Section 5 (and success criteria, section 6)"),
          ("Approved MVP scope", "Section 7 - 15 tasks, out-of-scope list")],
-        md("docs/01-problem-definition-and-scope.md").replace("(pending sign-off)", "(for the course teacher's sign-off)")))
+        md("docs/01-problem-definition-and-scope.md").replace("(pending sign-off)", "(see sign-off box below)")
+        + '<table class="check"><tr><th colspan="3">Approval of the frozen 15-task MVP scope</th></tr>'
+          '<tr><td style="height:46px">Course teacher (name / signature)</td><td>&nbsp;</td><td>Date: &nbsp; ____ / ____ / ______</td></tr></table>'
+          '<p style="font-size:9pt">The sheet asks for an <i>approved</i> MVP scope; approval can only be given by the course teacher, so this box is left for sign-off.</p>'))
 
     # ---- step 2
     parts.append(step(
@@ -122,11 +125,13 @@ def build():
         "Agile artefacts for the portal. The Kanban board and backlog are maintained as tables in the repository "
         "(<code>docs/02-agile-planning-and-devops-workflow.md</code>); the final state of the backlog is in step 6.",
         [("Backlog", "10 user stories with acceptance criteria + prioritised 15-task backlog"),
-         ("Task board", "Kanban table (state at planning time); final board in step 6"),
+         ("Task board", "Figures 2.2-2.3: Kanban board at sprint-1 start and at the end of sprint 3"),
          ("Sprint plan", "3 sprints with goals"), ("Definition of Done", "Section 5"),
          ("DevOps workflow diagram", "Figure: DevOps lifecycle")],
         md("docs/02-agile-planning-and-devops-workflow.md", cut_after="## 6. DevOps")
-        + img("diagram_lifecycle", "Figure 2.1 - DevOps lifecycle from development to operations (as implemented in this project)")))
+        + img("diagram_lifecycle", "Figure 2.1 - DevOps lifecycle from development to operations (as implemented in this project)")
+        + img("diagram_kanban_start", "Figure 2.2 - Kanban board at the start of sprint 1 (task states from the plan; WIP limit: In Progress <= 2)")
+        + img("diagram_kanban_end", "Figure 2.3 - Kanban board at the end of sprint 3: all 15 MVP tasks in Done (delivery evidence: step 6)")))
 
     # ---- step 3
     parts.append(step(
@@ -221,10 +226,12 @@ def build():
         7, S[6][0], S[6][1], S[6][2],
         "Jenkins 2.580 (LTS) runs from the WAR on port 9090 using JDK 21; the project itself is built with JDK 11 and Maven 3.9.9. "
         "Freestyle job <code>dcmp-ci</code> polls the repository (<code>H/2 * * * *</code>) and builds on every change.",
-        [("Configured Jenkins job", "Figures 7.1-7.2"), ("Successful build log", "Figures 7.3-7.4"),
+        [("Jenkins installed and configured", "Figure 7.0 (JDK, WAR, start command, plugins, tools, job settings) and Figure 7.1"),
+         ("Configured Jenkins job", "Figures 7.1-7.2"), ("Successful build log", "Figures 7.3-7.4"),
          ("Trigger evidence", "Figure 7.5: 'Started by an SCM change' + polling log"),
          ("Archived artefact", "Figure 7.6")],
-        img("jk_dashboard", "Figure 7.1 - Jenkins dashboard with the jobs")
+        term("s07_install", "Figure 7.0 - Jenkins installation and configuration: JDK 21, jenkins.war, start command, plugins, tools, dcmp-ci settings")
+        + img("jk_dashboard", "Figure 7.1 - Jenkins dashboard with the jobs")
         + img("jk_ci_job", "Figure 7.2 - Job dcmp-ci: status, last build, archived WAR, test result trend")
         + img("jk_ci_console", "Figure 7.3 - Console output of a successful build")
         + term("s07_jenkins_ci", "Figure 7.4 - Build log excerpt: SCM trigger, Git checkout, 11 tests, BUILD SUCCESS, archiving")
@@ -244,14 +251,15 @@ def build():
         "(<code>application-dev.properties</code>, <code>application-qa.properties</code>), and <code>APP_CONTEXT</code> sets the context path.",
         [("Jenkinsfile", "Listing below (current version; stages Checkout, Build, Package, Deploy, Verify)"),
          ("Successful pipeline run", "Figures 8.1-8.2"),
-         ("Deployed application URL/screenshot", "Figures 8.3-8.4"),
-         ("Configuration evidence (parameter)", "Figures 8.5-8.6")],
+         ("Deployed application URL/screenshot", "Figures 8.3-8.4 (and Tomcat evidence, Figure 8.6)"),
+         ("Configuration evidence (parameter)", "Figure 8.5 and the application-dev.properties listing; Tomcat setenv.bat in Figure 8.6")],
         code("Jenkinsfile", "Jenkinsfile (repository root)")
-        + img("jk_pipe_overview", "Figure 8.1 - Pipeline job: stage view of successful runs")
+        + img("jk_pipe_overview", "Figure 8.1 - Job page of dcmp-pipeline: last successful build, archived WAR, test result trend")
         + term("s08_pipeline_run", "Figure 8.2 - Console excerpt of pipeline build #1: all stages passed, deployed to Tomcat")
         + img("app_01_home_tomcat", "Figure 8.3 - Deployed application at http://localhost:8081/dcmp/ (Environment = DEV)", "70%")
         + img("app_02_health_tomcat", "Figure 8.4 - Health check of the Tomcat deployment", "55%")
         + img("jk_pipe_params", "Figure 8.5 - Parameters used by a pipeline run (DEPLOY_ENV = dev, APP_CONTEXT = dcmp) - the parameterised environment setting")
+        + term("s08_tomcat_config", "Figure 8.6 - Tomcat 9 target: port 8081, setenv.bat written by the pipeline from DEPLOY_ENV, deployed dcmp.war, live check")
         + code("src/main/resources/application-dev.properties", "application-dev.properties  (qa profile sets app.environment=QA)")))
 
     # ---- step 9
@@ -273,8 +281,8 @@ def build():
         "The Selenium suite runs inside the pipeline between Package and Deploy: the build is started on port 8082 with a throw-away database, "
         "the tests run against it, results and failure screenshots are published, and a failure stops the pipeline so <b>Deploy is skipped</b>. "
         "A defect was introduced on purpose (compliance rule changed from AND to OR); it passes all unit tests, and only Selenium catches it.",
-        [("Jenkins test report", "Figures 10.1, 10.4"), ("Failed pipeline evidence", "Figures 10.2-10.3"),
-         ("Defect correction commit", "Figure 10.5 (diff of both commits)"), ("Successful rerun", "Figures 10.6-10.7")],
+        [("Jenkins test report", "Figures 10.1, 10.4"), ("Failed pipeline evidence", "Figures 10.1b, 10.2, 10.3, 10.6"),
+         ("Defect correction commit", "Figure 10.5 (diff of both commits)"), ("Successful rerun", "Figures 10.3 (log), 10.7-10.8 (build #4)")],
         img("jk_pipe_stageview", "Figure 10.1 - Stage view of all pipeline runs. #3 is the deliberate defect (fails at Selenium); #2 was an earlier unplanned failure from a flaky test wait that was fixed; #4 and later are green")
         + img("jk_pipe_b3_stages", "Figure 10.1b - Build #3 stages: red at Selenium Tests, Deploy and Verify skipped")
         + img("jk_pipe_b3_console", "Figure 10.2 - Console of failed build #3: the AssertionFailedError (expected NON_COMPLIANT but was COMPLIANT)")
@@ -341,7 +349,7 @@ def build():
         "Source: <code>docs/14-provisioning-and-reliability.md</code>.",
         [("Provisioned node", "Figures 14.1-14.2"), ("Idempotency evidence", "Figure 14.3 (changed=0)"),
          ("Health-check result", "Figures 14.2, 14.4, 14.7"),
-         ("Rollback / recovery demonstration", "Figures 14.5-14.9")],
+         ("Rollback / recovery demonstration", "Figures 14.6-14.9 (14.5 and 14.10 show the node afterwards)")],
         term("s14_0_clean", "Figure 14.1 - Clean node before provisioning: no Java, no dcmp user, no /opt/dcmp")
         + term("s14_1-provision-1.0.6", "Figure 14.2 - Provisioning release 1.0.6: ok=17 changed=8 failed=0, health UP")
         + term("s14_2-idempotency-rerun", "Figure 14.3 - Re-run: ok=16 changed=0 (idempotent)")

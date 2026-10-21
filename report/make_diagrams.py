@@ -110,6 +110,36 @@ def pipeline():
     page("pipeline", 1170, 290, b)
 
 
+TASKS = {1: "Project skeleton", 2: "Device entity + repo", 3: "Create device form", 4: "List devices",
+         5: "Device details", 6: "Update device", 7: "Search / filter", 8: "Compliance rules",
+         9: "Roles + login", 10: "Status workflow", 11: "Status history", 12: "Dashboard",
+         13: "Validation + errors", 14: "Health endpoint", 15: "README + docs"}
+
+
+def board(title, y0, columns):
+    """columns: list of (name, [task numbers]) - draws one Kanban board starting at vertical offset y0."""
+    b = '<text class="h" x="20" y="%d">%s</text>' % (y0 + 6, title)
+    colw = 224
+    for ci, (name, ids) in enumerate(columns):
+        x = 20 + ci * (colw + 8)
+        h = 40 + max(len(ids), 1) * 30 + 14
+        b += '<rect x="%d" y="%d" width="%d" height="%d" rx="8" fill="#f4f6fa" stroke="#9aa5b8" stroke-width="1.5"/>' % (x, y0 + 20, colw, h)
+        b += '<text class="t" x="%d" y="%d" style="font-weight:700">%s (%d)</text>' % (x + colw / 2, y0 + 44, name, len(ids))
+        for k, tid in enumerate(ids):
+            fill = {"Done": "#e6f6ea", "In Progress": "#fff1e0", "Review": "#fff7d6"}.get(name, "#ffffff")
+            yy = y0 + 56 + k * 30
+            b += '<rect x="%d" y="%d" width="%d" height="24" rx="5" fill="%s" stroke="#7d8aa3"/>' % (x + 8, yy, colw - 16, fill)
+            b += '<text class="s" x="%d" y="%d" style="text-anchor:start">#%d %s</text>' % (x + 14, yy + 16, tid, TASKS[tid])
+    return b
+
+
+def kanban():
+    cols_start = [("Backlog", list(range(6, 16))), ("To Do", [2, 3, 4, 5]), ("In Progress", [1]), ("Review", []), ("Done", [])]
+    cols_end = [("Backlog", []), ("To Do", []), ("In Progress", []), ("Review", []), ("Done", list(range(1, 16)))]
+    page("kanban_start", 1200, 430, board("Kanban board - start of Sprint 1 (planning, step 2)", 24, cols_start))
+    page("kanban_end", 1200, 600, board("Kanban board - end of Sprint 3 (all 15 MVP tasks done, step 6)", 24, cols_end))
+
+
 def ansible():
     b = '<text class="h" x="20" y="30">Ansible provisioning lab (steps 13-14)</text>'
     # control node
@@ -133,8 +163,9 @@ def ansible():
 
 
 if __name__ == "__main__":
+    kanban()
     lifecycle(); usecase(); architecture(); pipeline(); ansible()
-    names = ["lifecycle", "usecase", "architecture", "pipeline", "ansible"]
+    names = ["kanban_start", "kanban_end", "lifecycle", "usecase", "architecture", "pipeline", "ansible"]
     args = ["diagram_%s=file:///%s/%s.html" % (n, BASE.replace("\\", "/"), n) for n in names]
     subprocess.run([sys.executable, os.path.join(HERE, "capture_web.py")] + args, check=True)
     from PIL import Image, ImageChops
