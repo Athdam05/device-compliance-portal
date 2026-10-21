@@ -37,8 +37,7 @@ Parameters/variables: `DEPLOY_ENV` (Jenkins parameter → Spring profile), `APP_
 Deployed URLs: Docker `http://localhost:8092/` · Tomcat `http://localhost:8081/dcmp/` · Registry `http://localhost:5000/v2/_catalog`.
 
 ## 4. Notes and limitations
-- The build was started with **Build with Parameters** in Jenkins, because SCM polling for the pipeline job keeps
-  watching a previously configured branch (see step 10, section 5). The freestyle job `dcmp-ci` polls correctly.
+- Build #6 was started manually (**Build with Parameters**). **Build #7 was started automatically** by SCM polling after the docs commit `386d8d0` was pushed to `feature/8-docker-cd` (Jenkins: "Started by an SCM change"); it built, tested, pushed `dcmp:1.0.7` and redeployed the container without any click - the end-to-end commit-to-container flow. Registry tags: `1.0.6`, `1.0.7`, `latest`.
 - The registry is plain HTTP on localhost, which Docker permits without extra configuration. It is not suitable for a remote host.
 - Every build adds a new `1.0.N` tag, so earlier versions stay available in the registry – used for rollback in step 14.
 - The Tomcat deployment from step 8 still runs in the same pipeline; the Docker container is an additional deployment target.

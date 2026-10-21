@@ -46,3 +46,4 @@ release folder is removed), a manual rollback is just re-pointing the link.
 - The node is a container (supervisor instead of systemd) and the "bad release" is a corrupted file, not a real faulty build.
 - Release 1.0.7 includes the small change that shows the release label on the home page (`app.version`).
 - Rollback restores code and service definition; the H2 database on `/var/lib/dcmp/data` is shared across releases and is not rolled back.
+- Naming: the Ansible release labels (1.0.6, 1.0.7, 1.0.8) are independent of the Docker image tags in step 12 (`dcmp:1.0.N`, where N is the Jenkins build number). Release 1.0.6 was deliberately taken from Jenkins build #6; 1.0.7 is a locally built WAR that adds the release label to the home page.

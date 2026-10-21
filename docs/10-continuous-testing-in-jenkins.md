@@ -32,6 +32,5 @@ This shows why UI-level tests matter: the defect passed every unit test and was 
 - Successful rerun: build **#4**
 
 ## 5. Known limitations
-- Jenkins SCM polling for the pipeline job kept watching the previously configured branch after the branch was changed,
-  so builds #3 and #4 were started manually ("Build with Parameters"). The freestyle job `dcmp-ci` polls correctly.
+- Right after the pipeline job was switched to a new branch, the SCM poller kept watching the old branch, so builds #3 and #4 were started manually with "Build with Parameters". After Jenkins was restarted the poller worked: build #7 was started automatically ("Started by an SCM change") by a later commit, and the freestyle job `dcmp-ci` polls `develop` correctly.
 - Tests use Microsoft Edge with a manually installed msedgedriver (`C:\Users\damal\tools\edgedriver`), because Selenium Manager could not fetch it.
