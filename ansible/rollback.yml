@@ -1,0 +1,65 @@
+---
+# Manual rollback / recovery: re-activate an earlier release that is still on the node.
+#   ansible-playbook rollback.yml -e target_version=1.0.6
+- name: Roll back Device Compliance Portal to a previous release
+  hosts: dcmp_servers
+  become: true
+  vars:
+    target_version: ""
+
+  tasks:
+    - name: A target version is required
+      ansible.builtin.fail:
+        msg: "pass -e target_version=<release>"
+      when: target_version == ""
+
+    - name: Check that the release folder still exists
+      ansible.builtin.stat:
+        path: "{{ app_home }}/releases/{{ target_version }}/app.war"
+      register: rel
+      failed_when: not rel.stat.exists
+
+    - name: Currently active release
+      ansible.builtin.stat:
+        path: "{{ app_home }}/current"
+      register: cur
+
+    - name: Show rollback
+      ansible.builtin.debug:
+        msg: "rolling back '{{ cur.stat.lnk_target | default('none') | basename }}' -> '{{ target_version }}'"
+
+    - name: Point 'current' at the target release
+      ansible.builtin.file:
+        src: "{{ app_home }}/releases/{{ target_version }}"
+        dest: "{{ app_home }}/current"
+        state: link
+        owner: "{{ app_user }}"
+        group: "{{ app_group }}"
+
+    - name: Keep the service definition's APP_VERSION label in step
+      ansible.builtin.template:
+        src: dcmp.conf.j2
+        dest: "/etc/supervisor/conf.d/{{ app_name }}.conf"
+        mode: "0644"
+      vars:
+        release_label: "{{ target_version }}"
+
+    - name: Restart the service
+      ansible.builtin.shell: |
+        supervisorctl reread
+        supervisorctl update {{ app_name }}
+        supervisorctl restart {{ app_name }}
+      changed_when: true
+
+    - name: Health check
+      ansible.builtin.uri:
+        url: "http://127.0.0.1:{{ app_port }}/actuator/health"
+        return_content: true
+      register: health
+      retries: 12
+      delay: 5
+      until: health.status == 200 and "UP" in health.content
+
+    - name: Report result
+      ansible.builtin.debug:
+        msg: "rollback complete: release {{ target_version }} is {{ health.json.status }}"

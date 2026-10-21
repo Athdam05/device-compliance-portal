@@ -1,0 +1,108 @@
+
+$ docker image ls device-compliance-portal
+IMAGE                             ID             DISK USAGE   CONTENT SIZE   EXTRA
+device-compliance-portal:1.0.0    757ff9f424f4        526MB          146MB        
+device-compliance-portal:latest   757ff9f424f4        526MB          146MB        
+
+$ docker image inspect device-compliance-portal:1.0.0 --format id={{.Id}} size={{.Size}} os={{.Os}}/{{.Architecture}} user={{.Config.User}} exposed={{.Config.ExposedPorts}}
+id=sha256:757ff9f424f4b7a6205cc66e475971ad19bcaff74101cb2f3b0cfad5b0c63334 size=146437137 os=linux/arm64 user=dcmp exposed=map[8080/tcp:map[]]
+
+$ docker history --no-trunc=false device-compliance-portal:1.0.0
+IMAGE          CREATED         CREATED BY                                      SIZE      COMMENT
+757ff9f424f4   8 minutes ago   ENTRYPOINT ["java" "-jar" "app.war"]            0B        buildkit.dockerfile.v0
+<missing>      8 minutes ago   HEALTHCHECK {Test:[CMD-SHELL curl -fs http:/…   0B        buildkit.dockerfile.v0
+<missing>      8 minutes ago   VOLUME [/data]                                  0B        buildkit.dockerfile.v0
+<missing>      8 minutes ago   EXPOSE [8080/tcp]                               0B        buildkit.dockerfile.v0
+<missing>      8 minutes ago   ENV PORT=8080 SPRING_PROFILES_ACTIVE=dev SPR…   0B        buildkit.dockerfile.v0
+<missing>      8 minutes ago   COPY /build/target/device-compliance-portal-…   44.4MB    buildkit.dockerfile.v0
+<missing>      9 minutes ago   WORKDIR /app                                    8.19kB    buildkit.dockerfile.v0
+<missing>      9 minutes ago   USER dcmp                                       0B        buildkit.dockerfile.v0
+<missing>      9 minutes ago   RUN /bin/sh -c useradd --system --create-hom…   65.5kB    buildkit.dockerfile.v0
+<missing>      9 minutes ago   LABEL org.opencontainers.image.title=device-…   0B        buildkit.dockerfile.v0
+<missing>      18 hours ago    ENTRYPOINT ["/__cacert_entrypoint.sh"]          0B        buildkit.dockerfile.v0
+<missing>      18 hours ago    COPY --chmod=755 entrypoint.sh /__cacert_ent…   12.3kB    buildkit.dockerfile.v0
+<missing>      18 hours ago    RUN /bin/sh -c set -eux;     echo "Verifying…   12.3kB    buildkit.dockerfile.v0
+<missing>      18 hours ago    RUN /bin/sh -c set -eux;     ARCH="$(dpkg --…   138MB     buildkit.dockerfile.v0
+<missing>      18 hours ago    ENV JAVA_VERSION=jdk-11.0.32.1+1                0B        buildkit.dockerfile.v0
+<missing>      18 hours ago    RUN /bin/sh -c set -eux;     apt-get update;…   60.5MB    buildkit.dockerfile.v0
+<missing>      18 hours ago    ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_AL…   0B        buildkit.dockerfile.v0
+<missing>      18 hours ago    ENV PATH=/opt/java/openjdk/bin:/usr/local/sb…   0B        buildkit.dockerfile.v0
+<missing>      18 hours ago    ENV JAVA_HOME=/opt/java/openjdk                 0B        buildkit.dockerfile.v0
+<missing>      10 days ago     umoci raw add-layer --image /home/buildd/roc…   12.3kB    Add rock control metadata
+<missing>      10 days ago     umoci config --image /home/buildd/rockcraft-…   0B        Set annotations
+<missing>      10 days ago     umoci config --image /home/buildd/rockcraft-…   0B        Set labels
+<missing>      10 days ago     umoci config --image /home/buildd/rockcraft-…   0B        Set default PATH for bare-based rock
+<missing>      10 days ago     umoci config --image /home/buildd/rockcraft-…   0B        Set default commands
+<missing>      10 days ago     umoci config --image /home/buildd/rockcraft-…   0B        Set entrypoint
+<missing>      10 days ago     umoci raw add-layer --image /home/buildd/roc…   136MB     
+
+== 1. create + start (map host 8090 -> container 8080, named volume for the database)
+
+$ docker run -d --name dcmp-demo -p 8090:8080 -v dcmp-data:/data device-compliance-portal:1.0.0
+01ca3f273499606847e4f7504e7d2a081b15cd77004e057cab774f01511aeb35
+
+== 2. wait for the application
+
+$ curl -s http://localhost:8090/actuator/health
+{"status":"UP"}
+
+$ docker ps --filter name=dcmp-demo
+CONTAINER ID   IMAGE                            COMMAND               CREATED         STATUS                   PORTS                                         NAMES
+01ca3f273499   device-compliance-portal:1.0.0   "java -jar app.war"   7 seconds ago   Up 6 seconds (healthy)   0.0.0.0:8090->8080/tcp, [::]:8090->8080/tcp   dcmp-demo
+
+== 3. inspect logs / state / resource use
+
+$ docker logs --tail 5 dcmp-demo
+2026-10-17 18:16:17.274  INFO 1 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2026-10-17 18:16:17.284  INFO 1 --- [           main] com.dcmp.portal.PortalApplication        : Started PortalApplication in 3.789 seconds (JVM running for 4.241)
+2026-10-17 18:16:18.155  INFO 1 --- [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-10-17 18:16:18.156  INFO 1 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-10-17 18:16:18.157  INFO 1 --- [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+
+$ docker inspect dcmp-demo --format status={{.State.Status}} pid={{.State.Pid}} ports={{.NetworkSettings.Ports}} health={{.State.Health.Status}}
+status=running pid=956 ports=map[8080/tcp:[{0.0.0.0 8090} {:: 8090}]] health=healthy
+
+$ docker stats --no-stream dcmp-demo
+CONTAINER ID   NAME        CPU %     MEM USAGE / LIMIT     MEM %     NET I/O           BLOCK I/O     PIDS
+01ca3f273499   dcmp-demo   0.82%     468.1MiB / 7.547GiB   6.06%     2.53kB / 1.33kB   0B / 8.19kB   48
+
+$ docker exec dcmp-demo sh -c id && ls -l /data
+uid=999(dcmp) gid=999(dcmp) groups=999(dcmp)
+total 32
+-rw-r--r-- 1 dcmp dcmp   146 Oct 17 18:16 dcmp.lock.db
+-rw-r--r-- 1 dcmp dcmp 28672 Oct 17 18:16 dcmp.mv.db
+
+== 4. stop
+
+$ docker stop dcmp-demo
+dcmp-demo
+
+$ docker ps -a --filter name=dcmp-demo
+CONTAINER ID   IMAGE                            COMMAND               CREATED          STATUS                                PORTS     NAMES
+01ca3f273499   device-compliance-portal:1.0.0   "java -jar app.war"   10 seconds ago   Exited (143) Less than a second ago             dcmp-demo
+
+== 5. restart (data volume survives)
+
+$ docker start dcmp-demo
+dcmp-demo
+
+$ curl -s http://localhost:8090/actuator/health
+{"status":"UP"}
+
+$ docker restart dcmp-demo
+dcmp-demo
+
+== 6. remove container (volume kept), then clean up
+
+$ docker rm -f dcmp-demo
+dcmp-demo
+
+$ docker ps -a --filter name=dcmp-demo
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+$ docker volume ls --filter name=dcmp-data
+DRIVER    VOLUME NAME
+local     dcmp-data
+
+$ docker volume rm dcmp-data
+dcmp-data

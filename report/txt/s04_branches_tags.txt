@@ -1,0 +1,31 @@
+$ git branch -a
+  develop
+  feature/1-device-create-list-view
+* feature/10-provisioning-rollback
+  feature/2-update-search-dashboard
+  feature/3-roles-workflow
+  feature/4-jenkinsfile-tomcat-deploy
+  feature/5-selenium-tests
+  feature/6-selenium-in-jenkins
+  feature/7-docker
+  feature/8-docker-cd
+  feature/9-ansible-config
+  main
+  release/v1.0.0
+  remotes/origin/HEAD -> origin/main
+  remotes/origin/develop
+  remotes/origin/feature/1-device-create-list-view
+  remotes/origin/feature/10-provisioning-rollback
+  remotes/origin/feature/2-update-search-dashboard
+  remotes/origin/feature/3-roles-workflow
+  remotes/origin/feature/4-jenkinsfile-tomcat-deploy
+  remotes/origin/feature/5-selenium-tests
+  remotes/origin/feature/6-selenium-in-jenkins
+  remotes/origin/feature/7-docker
+  remotes/origin/feature/8-docker-cd
+  remotes/origin/feature/9-ansible-config
+  remotes/origin/main
+  remotes/origin/release/v1.0.0
+
+$ git tag -n
+v1.0.0          v1.0.0 - MVP baseline: device CRUD, search, dashboard, roles, status workflow

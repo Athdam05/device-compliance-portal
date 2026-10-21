@@ -1,0 +1,11 @@
+$ bash ansible/run.sh up   # then verify the node is clean
+98f8d311da8dd1fa107ad5f10429fd4160a11f8a39b0747b58398822c66b17a1
+63d06afd52a289efe7e4d8e980a04f8d06975e088053c7bc40ac3157135514b2
+dcmp-node | SUCCESS => {
+    "changed": false,
+    "ping": "pong"
+}
+node: dcmp-node dcmp-node:base Up 5 seconds
+java: NOT installed (clean node)
+id: 'dcmp': no such user
+ls: cannot access '/opt/dcmp': No such file or directory

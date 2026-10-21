@@ -1,0 +1,5 @@
+$ ansible-playbook playbook.yml   (second run - idempotency preview)
+ok: [dcmp-node] => {
+    "msg": "dcmp 1.0.6 (env=dev) is UP on port 8080"
+PLAY RECAP
+dcmp-node                  : ok=13   changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0

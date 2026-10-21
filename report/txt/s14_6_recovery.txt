@@ -1,0 +1,19 @@
+$ docker exec dcmp-node supervisorctl status dcmp
+dcmp                             STARTING  
+
+$ docker exec dcmp-node sh -c "kill -9 $(pgrep -u dcmp java)"     # simulate the application crashing
+java process killed
+
+$ docker exec dcmp-node supervisorctl status dcmp   # supervisor notices and restarts it
+dcmp                             STARTING  
+
+$ curl localhost:8093/actuator/health
+{"status":"UP"}
+
+$ docker restart dcmp-node        # simulate a node reboot
+dcmp-node
+$ curl localhost:8093/actuator/health
+{"status":"UP"}
+$ docker exec dcmp-node supervisorctl status
+dcmp                             STARTING  
+sshd                             RUNNING   pid 7, uptime 0:00:06

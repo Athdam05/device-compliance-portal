@@ -1,0 +1,9 @@
+target/
+data/
+.git/
+.github/
+docs/
+*.md
+Jenkinsfile
+Dockerfile
+selenium.pid

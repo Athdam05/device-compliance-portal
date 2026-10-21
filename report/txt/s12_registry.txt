@@ -1,0 +1,19 @@
+$ docker image ls localhost:5000/dcmp
+IMAGE                        ID             DISK USAGE   CONTENT SIZE   EXTRA
+localhost:5000/dcmp:1.0.6    760f63be8673        526MB          146MB        
+localhost:5000/dcmp:1.0.7    e044aeacc3e2        526MB          146MB   U    
+localhost:5000/dcmp:latest   e044aeacc3e2        526MB          146MB   U    
+
+$ curl http://localhost:5000/v2/_catalog
+{"repositories":["dcmp"]}
+
+$ curl http://localhost:5000/v2/dcmp/tags/list
+{"name":"dcmp","tags":["1.0.7","latest","1.0.6"]}
+
+
+$ docker ps --filter name=dcmp-app
+NAMES      IMAGE                       STATUS                    PORTS
+dcmp-app   localhost:5000/dcmp:1.0.7   Up 15 minutes (healthy)   0.0.0.0:8092->8080/tcp, [::]:8092->8080/tcp
+
+$ docker image inspect localhost:5000/dcmp:1.0.6  (traceability label)
+git.commit=192d536acf4ee300388c2038a1a433e0c1a96c7f

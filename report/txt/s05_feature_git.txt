@@ -1,0 +1,19 @@
+$ git log --oneline --graph feature/1-device-create-list-view   (add / commit / push on the feature branch)
+* 7ed900f (origin/feature/1-device-create-list-view, feature/1-device-create-list-view) test: add device contr
+* 65a713c feat: link devices page from home
+* 2107150 feat: add device create, list and details pages
+* c91516e feat: add Device entity and repository
+* 255d866 docs: add README, issue templates and branch policy
+* 7d317ed docs: add requirements, architecture and setup guide
+* ea50829 docs: add problem definition and agile planning
+
+$ git reflog | grep -E "pull|merge"   (pull / merge activity)
+8da98f0 HEAD@{2026-10-17}: pull -q origin develop: Fast-forward
+a1bdd41 HEAD@{2026-10-17}: pull -q origin main: Fast-forward
+2c07e8f HEAD@{2026-10-17}: pull -q origin develop: Fast-forward
+bb8f57f HEAD@{2026-10-17}: commit (merge): merge: resolve list.html conflict between search UI and login header
+86163e2 HEAD@{2026-10-17}: pull -q origin develop: Fast-forward
+
+$ git remote -v
+origin	https://github.com/Athdam05/device-compliance-portal.git (fetch)
+origin	https://github.com/Athdam05/device-compliance-portal.git (push)

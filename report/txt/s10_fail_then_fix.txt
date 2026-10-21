@@ -1,0 +1,25 @@
+== build #3 (commit 9cc7492, deliberate defect) -> FAILURE, Deploy skipped
+Started by user Atharva Anand Damale
+Checking out Revision 9cc7492f779ffd82da64c0be3fb38c580bde24b2 (refs/remotes/origin/feature/6-selenium-in-jenkins)
+Commit message: "feat: relax compliance rule (DELIBERATE DEFECT for step 10 demo)"
+[Pipeline] { (Checkout)
+[Pipeline] { (Build)
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0
+[Pipeline] { (Package)
+[Pipeline] { (Selenium Tests)
+{"status":"UP"}
+Test instance is up on port 8082
+org.opentest4j.AssertionFailedError: expected: <NON_COMPLIANT> but was: <COMPLIANT>
+[ERROR] Tests run: 6, Failures: 1, Errors: 0, Skipped: 0
+[Pipeline] { (Deploy)
+Stage "Deploy" skipped due to earlier failure(s)
+[Pipeline] { (Verify)
+Stage "Verify" skipped due to earlier failure(s)
+Finished: FAILURE
+
+== build #4 (commit a1cfb33, fix) -> SUCCESS
+Checking out Revision a1cfb33e18298c8f581625400b0ff77f3e497d3e (refs/remotes/origin/feature/6-selenium-in-jenkins)
+Commit message: "fix: compliance requires all three controls (corrects defect caught by Selenium J2)"
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0
+Deployed: http://localhost:8081/dcmp/ (env=dev)
+Finished: SUCCESS

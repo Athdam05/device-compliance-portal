@@ -4,3 +4,10 @@ data/
 .idea/
 .vscode/
 *.iml
+selenium.pid
+ansible/keys/
+ansible/artifacts/
+ansible/logs/*.tmp
+!ansible/logs/*.log
+report/_preview/
+report/__pycache__/

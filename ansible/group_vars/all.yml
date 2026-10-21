@@ -1,0 +1,22 @@
+---
+# ---- Configuration specification (single place to change settings) ----
+app_name: dcmp
+app_user: dcmp
+app_group: dcmp
+app_version: "1.0.6"                    # release being deployed; each version gets its own folder
+app_env: dev                            # Spring profile (dev / qa)
+app_port: 8080                          # port the application listens on inside the node
+app_home: /opt/dcmp                     # /opt/dcmp/releases/<version>/app.war  +  /opt/dcmp/current -> release
+data_dir: /var/lib/dcmp/data            # H2 database files
+log_dir: /var/log/dcmp
+java_heap: 256m
+
+# WAR built and tested by Jenkins (copied into ansible/artifacts/ by run.sh); path as seen from the control container
+war_src: "/work/ansible/artifacts/app-{{ app_version }}.war"
+
+os_packages:
+  - openjdk-11-jre-headless
+  - curl
+  - ca-certificates
+  - supervisor
+health_wait: 60                         # seconds to wait for the port after a deployment

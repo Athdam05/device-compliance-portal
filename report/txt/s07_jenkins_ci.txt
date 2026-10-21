@@ -1,0 +1,16 @@
+== Jenkins job: dcmp-ci  (build #1, triggered by SCM polling)
+Started by an SCM change
+Cloning repository https://github.com/Athdam05/device-compliance-portal.git
+Checking out Revision 2c07e8fb09ad3378f7b6a4126ce90221a9a5af58 (refs/remotes/origin/develop)
+Commit message: "Merge pull request #4 from Athdam05/feature/3-roles-workflow"
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0
+[INFO] Building war: C:\Users\damal\tools\jenkins_home\workspace\dcmp-ci\target\device-compliance-portal-0.1.0-SNAPSHOT.war
+[INFO] BUILD SUCCESS
+Archiving artifacts
+Finished: SUCCESS
+
+== Archived artefact
+44389689 device-compliance-portal-0.1.0-SNAPSHOT.war
+
+== SCM polling (trigger configuration: H/2 * * * *)
+<spec>H/2 * * * *</spec>
