@@ -1,0 +1,80 @@
+
+PLAY [Provision Device Compliance Portal server] *******************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [dcmp-node]
+
+TASK [Refresh apt cache (at most once per hour)] *******************************
+ok: [dcmp-node]
+
+TASK [Install prerequisite packages] *******************************************
+ok: [dcmp-node]
+
+TASK [Create application group] ************************************************
+ok: [dcmp-node]
+
+TASK [Create unprivileged application user] ************************************
+ok: [dcmp-node]
+
+TASK [Create application, release, data and log folders] ***********************
+ok: [dcmp-node] => (item={'path': '/opt/dcmp', 'mode': '0755'})
+ok: [dcmp-node] => (item={'path': '/opt/dcmp/releases', 'mode': '0755'})
+changed: [dcmp-node] => (item={'path': '/opt/dcmp/releases/1.0.8', 'mode': '0755'})
+ok: [dcmp-node] => (item={'path': '/var/lib/dcmp', 'mode': '0755'})
+ok: [dcmp-node] => (item={'path': '/var/lib/dcmp/data', 'mode': '0750'})
+ok: [dcmp-node] => (item={'path': '/var/log/dcmp', 'mode': '0755'})
+
+TASK [Look at the currently active release] ************************************
+ok: [dcmp-node]
+
+TASK [Remember the previous release] *******************************************
+ok: [dcmp-node]
+
+TASK [Show release change] *****************************************************
+ok: [dcmp-node] => {
+    "msg": "active release: '1.0.7'  ->  new release: '1.0.8'"
+}
+
+TASK [Deploy the application WAR into its versioned release folder] ************
+changed: [dcmp-node]
+
+TASK [Point 'current' at this release] *****************************************
+changed: [dcmp-node]
+
+TASK [Install the supervisor program definition for the application] ***********
+changed: [dcmp-node]
+
+TASK [Apply pending service changes now (so the health check below tests the new release)] ***
+
+RUNNING HANDLER [Apply service changes] ****************************************
+fatal: [dcmp-node]: FAILED! => {"changed": true, "cmd": "supervisorctl reread\nsupervisorctl update dcmp\nsupervisorctl restart dcmp\n", "delta": "0:00:01.601954", "end": "2026-10-21 12:32:42.347757", "msg": "non-zero return code", "rc": 7, "start": "2026-10-21 12:32:40.745803", "stderr": "", "stderr_lines": [], "stdout": "dcmp: changed\ndcmp: stopped\ndcmp: updated process group\ndcmp: stopped\ndcmp: ERROR (spawn error)", "stdout_lines": ["dcmp: changed", "dcmp: stopped", "dcmp: updated process group", "dcmp: stopped", "dcmp: ERROR (spawn error)"]}
+
+TASK [ROLLBACK - release 1.0.8 failed its health check] ************************
+ok: [dcmp-node] => {
+    "msg": "restoring previous release '1.0.7'"
+}
+
+TASK [Stop here if there is nothing to roll back to] ***************************
+skipping: [dcmp-node]
+
+TASK [Re-point 'current' at the previous release] ******************************
+changed: [dcmp-node]
+
+TASK [Remove the failed release folder] ****************************************
+changed: [dcmp-node]
+
+TASK [Restore the service definition (so APP_VERSION names the release that is really running)] ***
+changed: [dcmp-node]
+
+TASK [Restart the service on the previous release] *****************************
+changed: [dcmp-node]
+
+TASK [Health check after rollback] *********************************************
+ok: [dcmp-node]
+
+TASK [Fail the play so the bad release is reported] ****************************
+fatal: [dcmp-node]: FAILED! => {"changed": false, "msg": "Release 1.0.8 FAILED health check - rolled back to 1.0.7 (UP)."}
+
+PLAY RECAP *********************************************************************
+dcmp-node                  : ok=18   changed=8    unreachable=0    failed=2    skipped=1    rescued=0    ignored=0   
+

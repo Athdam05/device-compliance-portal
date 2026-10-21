@@ -3,6 +3,7 @@
 #   bash ansible/run.sh up        build images, create network, start a FRESH managed node
 #   bash ansible/run.sh play      run the playbook (idempotent - safe to repeat)
 #   bash ansible/run.sh check     dry run (--check --diff)
+#   APP_VERSION=1.0.6 bash ansible/run.sh rollback   re-activate an earlier release
 #   bash ansible/run.sh destroy   remove the managed node and network
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -35,6 +36,7 @@ case "${1:-}" in
     ansible_run "ansible dcmp_servers -m ping"
     ;;
   play)  ansible_run "ansible-playbook playbook.yml -e app_version=$VERSION ${EXTRA:-}" ;;
+  rollback) ansible_run "ansible-playbook rollback.yml -e target_version=$VERSION" ;;
   check) ansible_run "ansible-playbook playbook.yml -e app_version=$VERSION --check --diff" ;;
   destroy) docker rm -f "$NODE" >/dev/null 2>&1 || true; docker network rm "$NET" >/dev/null 2>&1 || true ;;
   *) echo "usage: $0 up|play|check|destroy"; exit 1 ;;

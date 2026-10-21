@@ -19,3 +19,4 @@ os_packages:
   - curl
   - ca-certificates
   - supervisor
+health_wait: 60                         # seconds to wait for the port after a deployment
