@@ -1,0 +1,60 @@
+$ git log --oneline --graph origin/develop (merge/conflict area)
+*   8da98f0 (origin/develop, develop) Merge pull request #7 from Athdam05/feature/5-selenium-tests
+|\  
+| * 195f2b9 (origin/feature/5-selenium-tests, feature/5-selenium-tests) test: stabilise Selenium suite with na
+| * f42509c test: add Selenium journeys with failure screenshots
+| * 9f9ee08 build: add Selenium dependency and failsafe-based selenium profile
+* |   a99a600 Merge pull request #6 from Athdam05/feature/4-jenkinsfile-tomcat-deploy
+|\ \  
+| |/  
+|/|   
+| * 50ae525 (origin/feature/4-jenkinsfile-tomcat-deploy, feature/4-jenkinsfile-tomcat-deploy) ci: add Jenkinsf
+| * b235c4f feat: add per-environment Spring profiles and show environment on home page
+| * aea7c40 fix: use context-aware links so the app works under a Tomcat context path
+|/  
+*   2c07e8f Merge pull request #4 from Athdam05/feature/3-roles-workflow
+|\  
+| *   bb8f57f (origin/feature/3-roles-workflow, feature/3-roles-workflow) merge: resolve list.html conflict be
+| |\  
+| |/  
+|/|   
+* |   57ccaf1 Merge pull request #3 from Athdam05/feature/2-update-search-dashboard
+|\ \  
+| * | 4a12723 (origin/feature/2-update-search-dashboard, feature/2-update-search-dashboard) feat: add search f
+| * | 10ceee0 feat: add compliance summary dashboard
+| * | a50c840 feat: add device update and search
+|/ /  
+| * 8469906 feat: add move-status UI, history table and login-aware list header; update tests
+| * e2f237b feat: add status workflow service with role rules and history
+| * a6a5149 feat: add users, BCrypt login and session auth interceptor
+|/  
+*   86163e2 Merge pull request #2 from Athdam05/main
+|\  
+| * 2fdcddf Merge pull request #1 from Athdam05/feature/1-device-create-list-view
+|/| 
+| * 7ed900f (origin/feature/1-device-create-list-view, feature/1-device-create-list-view) test: add device con
+| * 65a713c feat: link devices page from home
+| * 2107150 feat: add device create, list and details pages
+| * c91516e feat: add Device entity and repository
+|/  
+* 255d866 docs: add README, issue templates and branch policy
+* 7d317ed docs: add requirements, architecture and setup guide
+* ea50829 docs: add problem definition and agile planning
+* 48d14fe chore: add Maven project skeleton with Spring Boot app
+* 9e5fc1f Initial commit
+
+$ git show bb8f57f --stat --format="%h %s%n%n%b" (conflict resolution commit)
+bb8f57f merge: resolve list.html conflict between search UI and login header
+
+Keep the Dashboard link and search form from feature/2 together with the
+logged-in user and logout button from feature/3. Update feature/2 tests to
+authenticate now that the login interceptor is in place.
+
+
+ .../java/com/dcmp/portal/DashboardController.java  | 32 +++++++++++
+ .../com/dcmp/portal/device/DeviceController.java   | 46 +++++++++++++--
+ .../com/dcmp/portal/device/DeviceRepository.java   | 11 ++++
+ src/main/resources/templates/dashboard.html        | 20 +++++++
+ src/main/resources/templates/devices/form.html     |  7 ++-
+ src/main/resources/templates/devices/list.html     | 16 +++++-
+ .../dcmp/portal/SearchUpdateDashboardTests.java    | 65 ++++++++++++++++++++++

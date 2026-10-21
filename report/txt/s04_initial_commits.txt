@@ -1,0 +1,13 @@
+$ git log --oneline --graph --decorate (first-commit history, oldest part)
+9e5fc1f Initial commit
+48d14fe chore: add Maven project skeleton with Spring Boot app
+ea50829 docs: add problem definition and agile planning
+7d317ed docs: add requirements, architecture and setup guide
+255d866 docs: add README, issue templates and branch policy
+c91516e feat: add Device entity and repository
+2107150 feat: add device create, list and details pages
+65a713c feat: link devices page from home
+7ed900f (origin/feature/1-device-create-list-view, feature/1-device-create-list-view) test: add device controller tests
+2fdcddf Merge pull request #1 from Athdam05/feature/1-device-create-list-view
+86163e2 Merge pull request #2 from Athdam05/main
+a50c840 feat: add device update and search

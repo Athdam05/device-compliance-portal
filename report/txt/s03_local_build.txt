@@ -1,0 +1,24 @@
+$ java -version
+openjdk version "11.0.32.1" 2026-08-18
+
+$ mvn -v
+Apache Maven 3.9.9 (8e8579a9e76f7d015ee5ec7bfcdc97d260186937)
+Maven home: C:\Users\damal\tools\apache-maven-3.9.9
+Java version: 11.0.32.1, vendor: Eclipse Adoptium, runtime: C:\Program Files\Eclipse Adoptium\jdk-11.0.32.101-hotspot
+
+$ mvn clean package
+[INFO] Building Device Compliance Management Portal 0.1.0-SNAPSHOT
+[INFO] --------------------------------[ war ]---------------------------------
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 25.622 s - in com.dcmp.portal.DeviceControllerTests
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.737 s - in com.dcmp.portal.PortalApplicationTests
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.314 s - in com.dcmp.portal.SearchUpdateDashboardTests
+[INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.015 s - in com.dcmp.portal.WorkflowTests
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0
+[INFO] --- war:3.3.2:war (default-war) @ device-compliance-portal ---
+[INFO] Processing war project
+[INFO] Building war: C:\Users\damal\Downloads\device-compliance-portal\target\device-compliance-portal-0.1.0-SNAPSHOT.war
+[INFO] BUILD SUCCESS
+[INFO] Total time:  53.026 s
+
+$ ls -l target/*.war
+44390667 target/device-compliance-portal-0.1.0-SNAPSHOT.war

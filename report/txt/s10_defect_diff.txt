@@ -1,0 +1,27 @@
+$ git show 9cc7492 -- src/main/java/com/dcmp/portal/device/Device.java   (the deliberately introduced defect)
+9cc7492 feat: relax compliance rule (DELIBERATE DEFECT for step 10 demo)
+
+--- a/src/main/java/com/dcmp/portal/device/Device.java
++++ b/src/main/java/com/dcmp/portal/device/Device.java
+@@ -53,6 +53,6 @@ public class Device {
+     public void setCreatedAt(LocalDateTime t) { this.createdAt = t; }
+ 
+     public boolean isCompliant() {
+-        return antivirusEnabled && diskEncrypted && firewallEnabled;
++        return antivirusEnabled || diskEncrypted || firewallEnabled;
+     }
+ }
+
+$ git show a1cfb33 -- src/main/java/com/dcmp/portal/device/Device.java   (the correction)
+a1cfb33 fix: compliance requires all three controls (corrects defect caught by Selenium J2)
+
+--- a/src/main/java/com/dcmp/portal/device/Device.java
++++ b/src/main/java/com/dcmp/portal/device/Device.java
+@@ -53,6 +53,6 @@ public class Device {
+     public void setCreatedAt(LocalDateTime t) { this.createdAt = t; }
+ 
+     public boolean isCompliant() {
+-        return antivirusEnabled || diskEncrypted || firewallEnabled;
++        return antivirusEnabled && diskEncrypted && firewallEnabled;
+     }
+ }

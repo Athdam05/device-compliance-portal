@@ -1,0 +1,44 @@
+$ ansible-playbook  (2-idempotency-rerun)
+PLAY [Provision Device Compliance Portal server]
+TASK [Gathering Facts]
+ok: [dcmp-node]
+TASK [Refresh apt cache (at most once per hour)]
+ok: [dcmp-node]
+TASK [Install prerequisite packages]
+ok: [dcmp-node]
+TASK [Create application group]
+ok: [dcmp-node]
+TASK [Create unprivileged application user]
+ok: [dcmp-node]
+TASK [Create application, release, data and log folders]
+ok: [dcmp-node] => (item={'path': '/opt/dcmp', 'mode': '0755'})
+ok: [dcmp-node] => (item={'path': '/opt/dcmp/releases', 'mode': '0755'})
+ok: [dcmp-node] => (item={'path': '/opt/dcmp/releases/1.0.6', 'mode': '0755'})
+ok: [dcmp-node] => (item={'path': '/var/lib/dcmp', 'mode': '0755'})
+ok: [dcmp-node] => (item={'path': '/var/lib/dcmp/data', 'mode': '0750'})
+ok: [dcmp-node] => (item={'path': '/var/log/dcmp', 'mode': '0755'})
+TASK [Look at the currently active release]
+ok: [dcmp-node]
+TASK [Remember the previous release]
+ok: [dcmp-node]
+TASK [Show release change]
+ok: [dcmp-node] => {
+    "msg": "active release: '1.0.6'  ->  new release: '1.0.6'"
+TASK [Deploy the application WAR into its versioned release folder]
+ok: [dcmp-node]
+TASK [Point 'current' at this release]
+ok: [dcmp-node]
+TASK [Install the supervisor program definition for the application]
+ok: [dcmp-node]
+TASK [Apply pending service changes now (so the health check below tests the new release)] ***
+TASK [Make sure the application service is running]
+ok: [dcmp-node]
+TASK [Wait until the application port is listening]
+ok: [dcmp-node]
+TASK [Health check]
+ok: [dcmp-node]
+TASK [Report result]
+ok: [dcmp-node] => {
+    "msg": "dcmp 1.0.6 (env=dev) is UP on port 8080"
+PLAY RECAP
+dcmp-node                  : ok=16   changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
