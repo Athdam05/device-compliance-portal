@@ -11,9 +11,14 @@ public class HomeController {
     @Value("${app.environment:LOCAL}")
     private String environment;
 
+    /** Release label injected by the deployment tooling (Ansible sets APP_VERSION). */
+    @Value("${app.version:unknown}")
+    private String version;
+
     @GetMapping("/")
     public String home(Model model) {
         model.addAttribute("environment", environment);
+        model.addAttribute("version", version);
         return "index";
     }
 }

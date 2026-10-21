@@ -1,0 +1,40 @@
+
+PLAY [Roll back Device Compliance Portal to a previous release] ****************
+
+TASK [Gathering Facts] *********************************************************
+ok: [dcmp-node]
+
+TASK [A target version is required] ********************************************
+skipping: [dcmp-node]
+
+TASK [Check that the release folder still exists] ******************************
+ok: [dcmp-node]
+
+TASK [Currently active release] ************************************************
+ok: [dcmp-node]
+
+TASK [Show rollback] ***********************************************************
+ok: [dcmp-node] => {
+    "msg": "rolling back '1.0.7' -> '1.0.6'"
+}
+
+TASK [Point 'current' at the target release] ***********************************
+changed: [dcmp-node]
+
+TASK [Keep the service definition's APP_VERSION label in step] *****************
+changed: [dcmp-node]
+
+TASK [Restart the service] *****************************************************
+changed: [dcmp-node]
+
+TASK [Health check] ************************************************************
+ok: [dcmp-node]
+
+TASK [Report result] ***********************************************************
+ok: [dcmp-node] => {
+    "msg": "rollback complete: release 1.0.6 is UP"
+}
+
+PLAY RECAP *********************************************************************
+dcmp-node                  : ok=9    changed=3    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
+

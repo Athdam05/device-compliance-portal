@@ -11,7 +11,9 @@ import org.junit.jupiter.api.extension.TestExecutionExceptionHandler;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -67,7 +69,23 @@ abstract class BaseSeleniumIT {
     protected void clickAndWait(By locator) {
         WebElement element = driver.findElement(locator);
         element.click();
-        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.stalenessOf(element));
+        new WebDriverWait(driver, Duration.ofSeconds(10)).until(d -> isDetached(element));
+    }
+
+    /**
+     * True once the element belongs to a page that has been replaced. Edge may report this either as a
+     * StaleElementReferenceException or as a generic WebDriverException ("Node with given id does not
+     * belong to the document"), so both count.
+     */
+    private static boolean isDetached(WebElement element) {
+        try {
+            element.isEnabled();
+            return false;
+        } catch (StaleElementReferenceException e) {
+            return true;
+        } catch (WebDriverException e) {
+            return e.getMessage() != null && e.getMessage().contains("does not belong to the document");
+        }
     }
 
     protected void login(String username, String password) {
