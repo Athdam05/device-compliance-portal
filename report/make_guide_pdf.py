@@ -1,6 +1,7 @@
 """docs/15-demo-guide.md -> report/DCMP_Demo_Guide.pdf (via headless Edge)."""
 import base64
 import os
+import sys
 
 import markdown
 from selenium import webdriver
@@ -21,7 +22,9 @@ code{background:#eef1f6;padding:0 3px;font-size:9.2pt} pre code{background:none;
 blockquote{margin:8px 0;padding:6px 12px;background:#fff7e0;border-left:4px solid #e0a800;font-style:italic}
 ul{margin:4px 0 4px 18px;padding:0} li{margin:2px 0}
 """
-text = open(os.path.join(ROOT, "docs", "15-demo-guide.md"), encoding="utf-8").read()
+MD = sys.argv[1] if len(sys.argv) > 1 else "15-demo-guide.md"
+OUT = sys.argv[2] if len(sys.argv) > 2 else "DCMP_Demo_Guide.pdf"
+text = open(os.path.join(ROOT, "docs", MD), encoding="utf-8").read()
 body = markdown.markdown(text, extensions=["tables", "fenced_code"])
 html = f"<!doctype html><html><head><meta charset='utf-8'><title>Demo Guide</title><style>{CSS}</style></head><body>{body}</body></html>"
 src = os.path.join(HERE, "_guide.html")
@@ -39,7 +42,7 @@ try:
     po.margin_left = po.margin_right = 1.4
     po.background = True
     pdf = d.print_page(po)
-    out = os.path.join(HERE, "DCMP_Demo_Guide.pdf")
+    out = os.path.join(HERE, OUT)
     open(out, "wb").write(base64.b64decode(pdf))
     print("PDF written", os.path.getsize(out) // 1024, "KB")
 finally:

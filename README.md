@@ -51,6 +51,7 @@ Step-by-step documentation (one file per step where a written deliverable exists
 13. [Configuration management (Ansible)](docs/13-configuration-management.md)
 14. [Provisioning, idempotency and rollback](docs/14-provisioning-and-reliability.md)
 15. [Live demo guide](docs/15-demo-guide.md) - how to start everything (`scripts/demo-start.ps1`) and present it
+16. [Project explained in plain language](docs/16-project-explained.md) - what was built and why, for answering questions
 
 Steps 4, 5, 7 and 8 (repository, feature branch, Jenkins job, pipeline) are evidenced by the repository itself (README, issues, pull requests,
 `Jenkinsfile`) and in the final report: [report/DCMP_DevOps_Report.pdf](report/DCMP_DevOps_Report.pdf) - all 14 steps with screenshots and outputs.
