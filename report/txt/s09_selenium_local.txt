@@ -1,0 +1,21 @@
+$ mvn test-compile failsafe:integration-test failsafe:verify -Pselenium -Dbase.url=http://localhost:8081/dcmp -Dwebdriver.edge.driver=...msedgedriver.exe
+[INFO]  T E S T S
+[INFO] Running com.dcmp.portal.selenium.UserJourneysIT
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 23.485 s - in com.dcmp.portal.selenium.UserJourneysIT
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS
+[INFO] Total time:  30.041 s
+
+$ cat target/failsafe-reports/com.dcmp.portal.selenium.UserJourneysIT.txt
+-------------------------------------------------------------------------------
+Test set: com.dcmp.portal.selenium.UserJourneysIT
+-------------------------------------------------------------------------------
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 23.485 s - in com.dcmp.portal.selenium.UserJourneysIT
+
+== individual test results (failsafe XML)
+  PASS  j2_registerDeviceWithMissingControlsIsNonCompliant  (3.562 s)
+  PASS  j5_dashboardShowsSummaryCounts  (1.643 s)
+  PASS  j2_registerCompliantDeviceShowsCompliantOnDetails  (1.518 s)
+  PASS  j3_searchFindsRegisteredDeviceAndHidesOthers  (1.885 s)
+  PASS  j1_invalidLoginIsRejectedAndValidLoginReachesDeviceList  (1.679 s)
+  PASS  j4_technicianCanMoveToUnderReviewAndHistoryIsRecorded  (13.162 s)

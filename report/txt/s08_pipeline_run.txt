@@ -1,0 +1,13 @@
+== Pipeline job dcmp-pipeline - build #1 (step 8: checkout, build, package, deploy to Tomcat, verify)
+Started by an SCM change
+Checking out Revision 50ae525a1c58132cdcbbffd93a13c8f05e144db7 (refs/remotes/origin/feature/4-jenkinsfile-tomcat-deploy)
+Commit message: "ci: add Jenkinsfile with checkout, build, package, deploy and verify stages"
+[Pipeline] { (Checkout)
+[Pipeline] { (Build)
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0
+[Pipeline] { (Package)
+[Pipeline] { (Deploy)
+[Pipeline] { (Verify)
+{"status":"UP"}
+Deployed: http://localhost:8081/dcmp/ (env=dev)
+Finished: SUCCESS

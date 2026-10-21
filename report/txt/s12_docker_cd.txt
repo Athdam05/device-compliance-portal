@@ -1,0 +1,47 @@
+== build #6 (commit 192d536): Docker Build -> Push -> Deploy
+Started by user Atharva Anand Damale
+Checking out Revision 192d536acf4ee300388c2038a1a433e0c1a96c7f (refs/remotes/origin/feature/8-docker-cd)
+Commit message: "ci: build versioned Docker image, push to local registry and deploy fresh container"
+[Pipeline] { (Checkout)
+[Pipeline] { (Build)
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0
+[Pipeline] { (Package)
+[Pipeline] { (Selenium Tests)
+{"status":"UP"}
+Test instance is up on port 8082
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0
+[Pipeline] { (Deploy)
+[Pipeline] { (Verify)
+Deployed: http://localhost:8081/dcmp/ (env=dev)
+[Pipeline] { (Docker Build)
+[Pipeline] { (Docker Push)
+C:\Users\damal\tools\jenkins_home\workspace\dcmp-pipeline>echo Tags now in the registry: 
+Tags now in the registry:
+{"name":"dcmp","tags":["latest","1.0.6"]}
+[Pipeline] { (Docker Deploy)
+C:\Users\damal\tools\jenkins_home\workspace\dcmp-pipeline>docker rm -f dcmp-app  2>nul 
+C:\Users\damal\tools\jenkins_home\workspace\dcmp-pipeline>docker run -d --name dcmp-app --restart unless-stopped -p 8092:8080 -v dcmp-app-data:/data -e SPRING_PROFIL
+Container dcmp-app is healthy: http://localhost:8092/ (image 1.0.6, env=dev)
+b0604ebbe695   localhost:5000/dcmp:1.0.6   "java -jar app.war"   7 seconds ago   Up 6 seconds (healthy)   0.0.0.0:8092->8080/tcp, [::]:8092->8080/tcp   dcmp-app
+Finished: SUCCESS
+
+== build #7: started AUTOMATICALLY by an SCM change (docs commit 386d8d0) - no manual click
+Started by an SCM change
+Checking out Revision 386d8d073a19155ec83049ad28577d94df857637 (refs/remotes/origin/feature/8-docker-cd)
+Commit message: "docs: add step 12 Jenkins-Docker continuous deployment evidence"
+[Pipeline] { (Checkout)
+[Pipeline] { (Build)
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0
+[Pipeline] { (Package)
+[Pipeline] { (Selenium Tests)
+[INFO] Tests run: 6, Failures: 0, Errors: 0, Skipped: 0
+[Pipeline] { (Deploy)
+[Pipeline] { (Verify)
+[Pipeline] { (Docker Build)
+[Pipeline] { (Docker Push)
+C:\Users\damal\tools\jenkins_home\workspace\dcmp-pipeline>echo Tags now in the registry: 
+Tags now in the registry:
+{"name":"dcmp","tags":["1.0.7","latest","1.0.6"]}
+[Pipeline] { (Docker Deploy)
+Container dcmp-app is healthy: http://localhost:8092/ (image 1.0.7, env=dev)
+Finished: SUCCESS

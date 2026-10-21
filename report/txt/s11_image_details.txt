@@ -1,0 +1,21 @@
+$ docker image ls device-compliance-portal
+IMAGE                             ID             DISK USAGE   CONTENT SIZE   EXTRA
+device-compliance-portal:1.0.0    757ff9f424f4        526MB          146MB        
+device-compliance-portal:latest   757ff9f424f4        526MB          146MB        
+
+$ docker image inspect device-compliance-portal:1.0.0 --format "id={{.Id}} size={{.Size}} user={{.Config.User}} ports={{.Config.ExposedPorts}}"
+id=sha256:757ff9f424f4b7a6205cc66e475971ad19bcaff74101cb2f3b0cfad5b0c63334 size=146437137 user=dcmp ports=map[8080/tcp:map[]]
+
+$ docker history device-compliance-portal:1.0.0
+CREATED BY                                      SIZE
+ENTRYPOINT ["java" "-jar" "app.war"]            0B
+HEALTHCHECK {Test:[CMD-SHELL curl -fs http:/…   0B
+VOLUME [/data]                                  0B
+EXPOSE [8080/tcp]                               0B
+ENV PORT=8080 SPRING_PROFILES_ACTIVE=dev SPR…   0B
+COPY /build/target/device-compliance-portal-…   44.4MB
+WORKDIR /app                                    8.19kB
+USER dcmp                                       0B
+RUN /bin/sh -c useradd --system --create-hom…   65.5kB
+LABEL org.opencontainers.image.title=device-…   0B
+ENTRYPOINT ["/__cacert_entrypoint.sh"]          0B

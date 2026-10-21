@@ -1,0 +1,1701 @@
+<!doctype html><html><head><meta charset='utf-8'><title>DevOps Mini Project Report</title><style>
+@page { size: A4; margin: 14mm 12mm; }
+body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 10.5pt; color: #111; line-height: 1.35; }
+h1 { font-size: 26pt; margin: 0 0 6px; } h2 { font-size: 16pt; margin: 0; } h3 { font-size: 12pt; margin: 14px 0 4px; }
+h4 { font-size: 11.5pt; margin: 12px 0 4px; border-bottom: 1px solid #ccc; padding-bottom: 2px; }
+.cover { text-align: center; padding-top: 70mm; page-break-after: always; }
+.cover .sub { font-size: 14pt; color: #333; margin: 6px 0; }
+.stephead { background: #1f3a68; color: #fff; padding: 8px 12px; border-radius: 6px; margin-top: 4px; }
+.stephead .num { font-size: 9pt; letter-spacing: 1px; opacity: .85; }
+section.step { page-break-before: always; }
+.task, .deliv { background: #f4f6fa; border-left: 4px solid #3b6fd4; padding: 6px 10px; margin: 8px 0; font-size: 9.5pt; }
+.deliv { border-left-color: #2e9b4e; background: #f1f9f3; }
+table { border-collapse: collapse; width: 100%; margin: 6px 0; font-size: 9pt; page-break-inside: auto; }
+th, td { border: 1px solid #bbb; padding: 3px 6px; vertical-align: top; text-align: left; }
+th { background: #eef1f6; } tr { page-break-inside: avoid; }
+table.check th { background: #dff0e3; }
+figure { margin: 10px 0; text-align: center; page-break-inside: avoid; } figure img { max-width: 100%; border: 1px solid #ccc; }
+figcaption { font-size: 8.5pt; color: #333; margin-top: 3px; font-style: italic; }
+pre.code { background: #f6f8fa; border: 1px solid #ddd; padding: 6px; font-size: 7pt; line-height: 1.25; white-space: pre-wrap; word-break: break-all; }
+.codehead { font-size: 8.5pt; font-weight: 700; background: #e8ebf0; padding: 3px 6px; margin-top: 8px; border: 1px solid #ddd; border-bottom: 0; }
+code { background: #f1f1f1; padding: 0 3px; font-size: 9pt; }
+.pending { border: 2px dashed #d33; color: #b00; padding: 12px; margin: 8px 0; font-weight: 700; }
+ul { margin: 4px 0 4px 18px; padding: 0; } p { margin: 5px 0; }
+.toc td, .toc th { font-size: 9.5pt; }
+</style></head><body>
+<div class="cover">
+<h1>Automated Device Compliance Management Portal</h1>
+<div class="sub">DevOps Mini Project - Step-by-step Deliverables and Outputs</div>
+<div class="sub" style="margin-top:30px"><b>Atharva Anand Damale</b> &nbsp;|&nbsp; Roll/ID 23102C0004</div>
+<div class="sub">Department of Computer Engineering - BE CMPN C</div>
+<div class="sub">Academic Year 2026-27 (ODD Semester)</div>
+<div class="sub" style="margin-top:30px">Repository: github.com/Athdam05/device-compliance-portal</div>
+</div>
+<section><h2>How to read this report</h2>
+<p>The report follows the 14 steps given on the course sheet. Each step starts with the task and the deliverable exactly as given,
+then a checklist that points to where every deliverable is shown, followed by the evidence: screenshots of the running application,
+Jenkins and GitHub, rendered command/log output, code listings and tables. Terminal and log figures are rendered from the real command output and Jenkins/Ansible logs saved during the work;
+long logs are shown as excerpts (lines were selected, never altered). The complete source, scripts and raw logs are in the repository.</p>
+<table class="toc"><tr><th>Step</th><th>Title</th></tr><tr><td>1</td><td>Problem Definition and Scope</td></tr><tr><td>2</td><td>Agile Planning and DevOps Workflow</td></tr><tr><td>3</td><td>Requirements, Architecture and Technology Setup</td></tr><tr><td>4</td><td>Git and GitHub Repository Initialization</td></tr><tr><td>5</td><td>Feature Development with Branching</td></tr><tr><td>6</td><td>MVP Completion and Git Collaboration</td></tr><tr><td>7</td><td>Jenkins Installation and Continuous Integration Job</td></tr><tr><td>8</td><td>Pipeline as Code and Server Deployment</td></tr><tr><td>9</td><td>Selenium Test Design and Local Execution</td></tr><tr><td>10</td><td>Continuous Testing in Jenkins</td></tr><tr><td>11</td><td>Docker Image and Container Lifecycle</td></tr><tr><td>12</td><td>Jenkins-Docker Continuous Deployment</td></tr><tr><td>13</td><td>Configuration Management Script</td></tr><tr><td>14</td><td>Automated Provisioning and Reliability Validation</td></tr></table>
+<h4>Technology used</h4>
+<p>Java 11, Spring Boot 2.7, Thymeleaf, H2 | Maven 3.9.9 | Git/GitHub | Jenkins 2.580 (JDK 21) | Apache Tomcat 9.0.98 |
+Selenium 4.21 + Microsoft Edge 155 | Docker 29 + local registry (registry:2) | Ansible core 2.17 (control node in a container), Ubuntu 22.04 managed node.</p>
+</section>
+<section class="step">
+<div class="stephead"><span class="num">STEP 1</span><h2>Problem Definition and Scope</h2></div>
+<div class="task"><b>Task given:</b> Study the real-time need for the Device Compliance Management Portal. Identify target users, existing pain points, stakeholders, constraints and measurable success criteria. Freeze a small 15-Task MVP scope.</div>
+<div class="deliv"><b>Deliverable required:</b> Problem statement, stakeholder list, objectives, constraints and approved MVP scope.</div>
+<p>Document written for the Device Compliance Management Portal: problem, users, objectives, constraints and the frozen 15-task MVP. Source: <code>docs/01-problem-definition-and-scope.md</code> in the repository.</p>
+<table class="check"><tr><th>Deliverable required by the sheet</th><th>Shown in this report</th></tr><tr><td>Problem statement</td><td>Section 1 below</td></tr><tr><td>Stakeholder list</td><td>Section 2 table</td></tr><tr><td>Objectives</td><td>Section 4</td></tr><tr><td>Constraints</td><td>Section 5 (and success criteria, section 6)</td></tr><tr><td>Approved MVP scope</td><td>Section 7 - 15 tasks, out-of-scope list</td></tr></table>
+<h4>1. Problem Statement</h4>
+<p>Organisations (college labs, small IT teams) track laptops, desktops and servers in
+spreadsheets. Checks such as OS patch level, antivirus status, disk encryption and
+firewall state are done manually, so non-compliant devices go unnoticed, audits are slow,
+and there is no single place to see who is responsible for fixing what.</p>
+<p>The portal centralises device records, evaluates each device against compliance rules,
+and drives a role-based workflow (Reported -&gt; Under Review -&gt; Remediated -&gt; Closed).</p>
+<h4>2. Target Users &amp; Stakeholders</h4>
+<table>
+<thead>
+<tr>
+<th>Stakeholder</th>
+<th>Role in system</th>
+<th>Need</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IT Administrator</td>
+<td>ADMIN</td>
+<td>Register devices, manage rules, close findings</td>
+</tr>
+<tr>
+<td>Compliance Officer</td>
+<td>AUDITOR</td>
+<td>Review non-compliant devices, approve remediation</td>
+</tr>
+<tr>
+<td>Technician</td>
+<td>TECHNICIAN</td>
+<td>Fix issues, update device status</td>
+</tr>
+<tr>
+<td>Department Head / Management</td>
+<td>Viewer (dashboard)</td>
+<td>Summary of compliance posture</td>
+</tr>
+<tr>
+<td>Course Teacher / Evaluator</td>
+<td>External</td>
+<td>Verify DevOps pipeline end to end</td>
+</tr>
+</tbody>
+</table>
+<h4>3. Existing Pain Points</h4>
+<ul>
+<li>Spreadsheet records are stale, duplicated and not searchable.</li>
+<li>No ownership/accountability trail for remediation.</li>
+<li>No instant summary (compliant vs non-compliant counts).</li>
+<li>Manual deployment of internal tools is error prone.</li>
+</ul>
+<h4>4. Objectives</h4>
+<ol>
+<li>Create, view, update and search device records.</li>
+<li>Role-based status workflow for compliance findings.</li>
+<li>Summary dashboard (total / compliant / non-compliant / under review).</li>
+<li>Fully automated build, test, containerise and deploy pipeline (CI/CD).</li>
+</ol>
+<h4>5. Constraints</h4>
+<ul>
+<li>Individual student project; one semester timeline.</li>
+<li>Java 11, Maven, Spring Boot, embedded H2 DB; Tomcat/Docker targets.</li>
+<li>Free tools only (GitHub, Jenkins, Docker Hub, Ansible).</li>
+<li>Runs on a single local node (Windows 11 + Docker).</li>
+</ul>
+<h4>6. Measurable Success Criteria</h4>
+<ul>
+<li>All 15 MVP tasks done and demonstrable.</li>
+<li>&ge; 4 Selenium journeys pass automatically in Jenkins.</li>
+<li>Commit-to-running-container pipeline completes in &lt; 10 min.</li>
+<li>Ansible re-run reports 0 changed tasks (idempotent); rollback &lt; 2 min.</li>
+</ul>
+<h4>7. Frozen 15-Task MVP Scope</h4>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Task</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Project skeleton (Spring Boot, Maven)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Device entity &amp; repository (H2)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Create device form</td>
+</tr>
+<tr>
+<td>4</td>
+<td>List/view devices</td>
+</tr>
+<tr>
+<td>5</td>
+<td>View device details</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Update device</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Search/filter by name, owner, status</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Compliance rule evaluation (OS, AV, encryption, firewall)</td>
+</tr>
+<tr>
+<td>9</td>
+<td>User roles (ADMIN, AUDITOR, TECHNICIAN) &amp; login</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Status workflow transitions with role checks</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Status history log</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Summary dashboard</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Input validation &amp; error pages</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Health endpoint</td>
+</tr>
+<tr>
+<td>15</td>
+<td>README &amp; API documentation</td>
+</tr>
+</tbody>
+</table>
+<p>Out of scope: agent-based auto-scanning, email alerts, SSO, multi-tenant.</p>
+<p><strong>Approved by:</strong> Course teacher (for the course teacher's sign-off)</p>
+</section>
+<section class="step">
+<div class="stephead"><span class="num">STEP 2</span><h2>Agile Planning and DevOps Workflow</h2></div>
+<div class="task"><b>Task given:</b> Create user stories and acceptance criteria for the Device Compliance Management Portal. Prepare a product backlog, 15-Task Kanban/Scrum plan, Definition of Done and a DevOps lifecycle diagram from development to operations.</div>
+<div class="deliv"><b>Deliverable required:</b> Backlog, task board, sprint plan, Definition of Done and DevOps workflow diagram.</div>
+<p>Agile artefacts for the portal. The Kanban board and backlog are maintained as tables in the repository (<code>docs/02-agile-planning-and-devops-workflow.md</code>); the final state of the backlog is in step 6.</p>
+<table class="check"><tr><th>Deliverable required by the sheet</th><th>Shown in this report</th></tr><tr><td>Backlog</td><td>10 user stories with acceptance criteria + prioritised 15-task backlog</td></tr><tr><td>Task board</td><td>Kanban table (state at planning time); final board in step 6</td></tr><tr><td>Sprint plan</td><td>3 sprints with goals</td></tr><tr><td>Definition of Done</td><td>Section 5</td></tr><tr><td>DevOps workflow diagram</td><td>Figure: DevOps lifecycle</td></tr></table>
+<h4>1. User Stories &amp; Acceptance Criteria</h4>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>User Story</th>
+<th>Acceptance Criteria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>US1</td>
+<td>As an Admin, I want to register a device so it is tracked.</td>
+<td>Form validates name, owner, OS, serial; saved device appears in list.</td>
+</tr>
+<tr>
+<td>US2</td>
+<td>As a user, I want to view all devices and details.</td>
+<td>List shows name, owner, status; clicking opens detail page.</td>
+</tr>
+<tr>
+<td>US3</td>
+<td>As an Admin/Technician, I want to update a device.</td>
+<td>Edits persist; validation errors shown inline.</td>
+</tr>
+<tr>
+<td>US4</td>
+<td>As a user, I want to search devices.</td>
+<td>Search by name/owner/status returns matching rows; empty result message shown.</td>
+</tr>
+<tr>
+<td>US5</td>
+<td>As an Auditor, I want devices auto-evaluated against rules.</td>
+<td>Device with outdated OS / no AV / no encryption / firewall off is flagged NON_COMPLIANT.</td>
+</tr>
+<tr>
+<td>US6</td>
+<td>As a user, I want to log in with a role.</td>
+<td>Wrong credentials rejected; menus depend on role.</td>
+</tr>
+<tr>
+<td>US7</td>
+<td>As staff, I want a status workflow.</td>
+<td>Only allowed transitions per role (Technician: Reported-&gt;Under Review-&gt;Remediated; Auditor/Admin: -&gt;Closed).</td>
+</tr>
+<tr>
+<td>US8</td>
+<td>As an Auditor, I want status history.</td>
+<td>Each transition stores who, when, from, to.</td>
+</tr>
+<tr>
+<td>US9</td>
+<td>As a manager, I want a dashboard.</td>
+<td>Shows totals of compliant, non-compliant, under review devices.</td>
+</tr>
+<tr>
+<td>US10</td>
+<td>As an Ops engineer, I want a health endpoint.</td>
+<td><code>/actuator/health</code> returns UP.</td>
+</tr>
+</tbody>
+</table>
+<h4>2. Product Backlog (prioritised, 15 tasks)</h4>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Task</th>
+<th>Story</th>
+<th>Pts</th>
+<th>Sprint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Project skeleton (Spring Boot, Maven)</td>
+<td>-</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Device entity &amp; repository</td>
+<td>US1</td>
+<td>3</td>
+<td>1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Create device form</td>
+<td>US1</td>
+<td>3</td>
+<td>1</td>
+</tr>
+<tr>
+<td>4</td>
+<td>List/view devices</td>
+<td>US2</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Device details page</td>
+<td>US2</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Update device</td>
+<td>US3</td>
+<td>3</td>
+<td>2</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Search/filter</td>
+<td>US4</td>
+<td>3</td>
+<td>2</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Compliance rule engine</td>
+<td>US5</td>
+<td>5</td>
+<td>2</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Roles &amp; login</td>
+<td>US6</td>
+<td>5</td>
+<td>2</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Status workflow w/ role checks</td>
+<td>US7</td>
+<td>5</td>
+<td>3</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Status history log</td>
+<td>US8</td>
+<td>3</td>
+<td>3</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Summary dashboard</td>
+<td>US9</td>
+<td>3</td>
+<td>3</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Validation &amp; error pages</td>
+<td>US1,3</td>
+<td>2</td>
+<td>3</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Health endpoint</td>
+<td>US10</td>
+<td>1</td>
+<td>3</td>
+</tr>
+<tr>
+<td>15</td>
+<td>README &amp; API docs</td>
+<td>-</td>
+<td>2</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<h4>3. Sprint Plan (3 sprints x ~1 week)</h4>
+<ul>
+<li><strong>Sprint 1 – Foundation &amp; Feature 1:</strong> tasks 1-5 (device create/list/view). Goal: first working workflow.</li>
+<li><strong>Sprint 2 – Core MVP:</strong> tasks 6-9 (update, search, rules, login).</li>
+<li><strong>Sprint 3 – Workflow &amp; Release:</strong> tasks 10-15, release tag v1.0.0.
+DevOps work (Jenkins, Docker, Ansible) runs in parallel as a pipeline track.</li>
+</ul>
+<h4>4. Kanban Board (current state)</h4>
+<table>
+<thead>
+<tr>
+<th>Backlog</th>
+<th>To Do</th>
+<th>In Progress</th>
+<th>Review</th>
+<th>Done</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6-15</td>
+<td>2,3,4,5</td>
+<td>1</td>
+<td>-</td>
+<td>Step 1 scope, Step 2 planning</td>
+</tr>
+</tbody>
+</table>
+<p>Columns WIP limit: In Progress &lt;= 2, Review &lt;= 2. Board maintained as GitHub Project / Issues.</p>
+<h4>5. Definition of Done</h4>
+<ul>
+<li>Code compiled, merged to <code>develop</code> via reviewed pull request.</li>
+<li>Unit tests pass; Selenium journey for the feature passes.</li>
+<li>Jenkins build is green.</li>
+<li>Acceptance criteria demonstrated.</li>
+<li>README/docs updated; no critical warnings.</li>
+<li>Deployable as WAR and Docker image.</li>
+</ul><figure><img src="shots/diagram_lifecycle.png"><figcaption>Figure 2.1 - DevOps lifecycle from development to operations (as implemented in this project)</figcaption></figure>
+</section>
+<section class="step">
+<div class="stephead"><span class="num">STEP 3</span><h2>Requirements, Architecture and Technology Setup</h2></div>
+<div class="task"><b>Task given:</b> Design the minimum application architecture for the Device Compliance Management Portal. The MVP should cover create, view, update and search records; role-based status workflow; summary dashboard. Select the programming stack, Maven/Gradle/Ant build tool, database if required, Tomcat/Nginx deployment target and local development setup.</div>
+<div class="deliv"><b>Deliverable required:</b> SRS summary, use-case diagram, architecture diagram, data model/API list and working local setup.</div>
+<p>Architecture and technology choices, plus a working local setup (build, tests, run). Source: <code>docs/03-requirements-architecture-setup.md</code>.</p>
+<table class="check"><tr><th>Deliverable required by the sheet</th><th>Shown in this report</th></tr><tr><td>SRS summary</td><td>Section 1</td></tr><tr><td>Use-case diagram</td><td>Figure 3.1</td></tr><tr><td>Architecture diagram</td><td>Figure 3.2</td></tr><tr><td>Data model / API list</td><td>Sections 5 and 6</td></tr><tr><td>Working local setup</td><td>Figures 3.3-3.4: build output and running application</td></tr></table>
+<h4>1. SRS Summary</h4>
+<p><strong>Functional:</strong> FR1 create device · FR2 view list/details · FR3 update · FR4 search (name/owner/status) ·
+FR5 compliance evaluation · FR6 login with roles · FR7 role-based status workflow · FR8 status history · FR9 dashboard · FR10 health endpoint.
+<strong>Non-functional:</strong> NFR1 page response &lt; 2 s · NFR2 passwords hashed · NFR3 deployable as WAR (Tomcat) and Docker image ·
+NFR4 automated build/test/deploy · NFR5 idempotent provisioning.</p>
+<h4>2. Technology Stack</h4>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Choice</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Language / Framework</td>
+<td>Java 11, Spring Boot 2.7 (MVC, Data JPA, Validation, Actuator)</td>
+</tr>
+<tr>
+<td>UI</td>
+<td>Thymeleaf server-side templates</td>
+</tr>
+<tr>
+<td>Build tool</td>
+<td>Apache Maven 3.9.9</td>
+</tr>
+<tr>
+<td>Database</td>
+<td>H2 (file mode)</td>
+</tr>
+<tr>
+<td>Deployment target</td>
+<td>Apache Tomcat 9 (WAR) and Docker container</td>
+</tr>
+<tr>
+<td>CI/CD</td>
+<td>Git/GitHub, Jenkins, Docker Hub</td>
+</tr>
+<tr>
+<td>Testing</td>
+<td>JUnit 5, Selenium WebDriver</td>
+</tr>
+<tr>
+<td>Config management</td>
+<td>Ansible</td>
+</tr>
+</tbody>
+</table><figure><img src="shots/diagram_usecase.png"><figcaption>Figure 3.1 - Use-case diagram</figcaption></figure><figure><img src="shots/diagram_architecture.png"><figcaption>Figure 3.2 - Architecture diagram</figcaption></figure><h4>5. Data Model</h4>
+<p><strong>Device</strong>(id, name, owner, serialNo, os, osVersion, antivirusEnabled, diskEncrypted, firewallEnabled, complianceState, workflowStatus, createdAt, updatedAt)
+<strong>AppUser</strong>(id, username, passwordHash, role)
+<strong>StatusHistory</strong>(id, deviceId, fromStatus, toStatus, changedBy, changedAt)
+Relations: Device 1—* StatusHistory.</p>
+<h4>6. API / Route List</h4>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td>/login</td>
+<td>login page</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>/devices</td>
+<td>list + search (<code>?q=&amp;status=</code>)</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>/devices/new · POST /devices</td>
+<td>create</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>/devices/{id}</td>
+<td>details</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>/devices/{id}/edit · POST /devices/{id}</td>
+<td>update</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>/devices/{id}/status</td>
+<td>workflow transition</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>/dashboard</td>
+<td>summary</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>/actuator/health</td>
+<td>health check</td>
+</tr>
+</tbody>
+</table><figure><img src="shots/term_s03_local_build.png"><figcaption>Figure 3.3 - Local setup: JDK, Maven, `mvn clean package` (11 tests pass, WAR produced)</figcaption></figure><figure><img src="shots/app_01_home_tomcat.png" style="max-width:70%"><figcaption>Figure 3.4 - Application running (home page) and health endpoint below</figcaption></figure><figure><img src="shots/app_02_health_tomcat.png" style="max-width:55%"><figcaption>Figure 3.5 - /actuator/health returns UP</figcaption></figure>
+</section>
+<section class="step">
+<div class="stephead"><span class="num">STEP 4</span><h2>Git and GitHub Repository Initialization</h2></div>
+<div class="task"><b>Task given:</b> Create a GitHub repository for the Device Compliance Management Portal. Add README, .gitignore, folder structure, issue templates and branch naming rules. Commit the initial application skeleton using meaningful commit messages.</div>
+<div class="deliv"><b>Deliverable required:</b> Repository URL, README, initial commits, issues and branch policy.</div>
+<p>Public repository: <a href='https://github.com/Athdam05/device-compliance-portal'>github.com/Athdam05/device-compliance-portal</a>.</p>
+<table class="check"><tr><th>Deliverable required by the sheet</th><th>Shown in this report</th></tr><tr><td>Repository URL</td><td>above and Figure 4.1</td></tr><tr><td>README</td><td>Figure 4.2 and text below</td></tr><tr><td>Initial commits</td><td>Figures 4.3-4.4</td></tr><tr><td>Issues</td><td>Figures 4.5-4.6 (issue templates and created issues)</td></tr><tr><td>Branch policy</td><td>README section below, Figure 4.7 (branches)</td></tr></table>
+<figure><img src="shots/gh_repo_home.png"><figcaption>Figure 4.1 - GitHub repository (files, branches, README)</figcaption></figure><figure><img src="shots/gh_readme.png"><figcaption>Figure 4.2 - README rendered on GitHub</figcaption></figure><figure><img src="shots/term_s04_initial_commits.png"><figcaption>Figure 4.3 - Initial commits with meaningful messages</figcaption></figure><figure><img src="shots/gh_commits_main.png"><figcaption>Figure 4.4 - Commit history on GitHub</figcaption></figure><h3>Issue templates (.github/ISSUE_TEMPLATE)</h3><div class="codehead">feature_request.md</div><pre class="code">---
+name: Feature / user story
+about: Propose a feature or MVP task
+labels: enhancement
+---
+**User story**
+As a &lt;role&gt;, I want &lt;goal&gt; so that &lt;benefit&gt;.
+
+**Acceptance criteria**
+- [ ]
+
+**Branch:** `feature/&lt;issue#&gt;-&lt;name&gt;`
+</pre><div class="codehead">bug_report.md</div><pre class="code">---
+name: Bug report
+about: Report a defect
+labels: bug
+---
+**Steps to reproduce**
+
+**Expected result**
+
+**Actual result**
+
+**Environment / logs**
+</pre><figure><img src="shots/gh_issues.png"><figcaption>Figure 4.5 - Issues created from the user stories</figcaption></figure><figure><img src="shots/gh_issue_detail.png"><figcaption>Figure 4.6 - Example issue with acceptance criteria</figcaption></figure><h3>Branch naming and policy (from README)</h3><h4>Branch policy</h4>
+<table>
+<thead>
+<tr>
+<th>Branch</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>main</code></td>
+<td>stable, tagged releases only</td>
+</tr>
+<tr>
+<td><code>develop</code></td>
+<td>integration branch; PRs merge here</td>
+</tr>
+<tr>
+<td><code>feature/&lt;issue#&gt;-&lt;short-name&gt;</code></td>
+<td>new features (e.g. <code>feature/3-create-device</code>)</td>
+</tr>
+<tr>
+<td><code>bugfix/&lt;issue#&gt;-&lt;short-name&gt;</code></td>
+<td>bug fixes</td>
+</tr>
+<tr>
+<td><code>hotfix/&lt;short-name&gt;</code></td>
+<td>urgent fixes from <code>main</code></td>
+</tr>
+</tbody>
+</table>
+<p>Rules: no direct pushes to <code>main</code>/<code>develop</code>; every change via pull request with review;
+commit messages follow <code>type: summary</code> (<code>feat</code>, <code>fix</code>, <code>docs</code>, <code>test</code>, <code>chore</code>, <code>ci</code>).</p><figure><img src="shots/term_s04_branches_tags.png"><figcaption>Figure 4.7 - Branches and tag in the repository</figcaption></figure>
+</section>
+<section class="step">
+<div class="stephead"><span class="num">STEP 5</span><h2>Feature Development with Branching</h2></div>
+<div class="task"><b>Task given:</b> Implement the first core workflow of the Device Compliance Management Portal on a feature branch. Use add, commit, push, pull and logs. Raise a pull request, review changes and merge into the development branch.</div>
+<div class="deliv"><b>Deliverable required:</b> Working feature 1, feature branch, pull request, review comments and merge evidence.</div>
+<p>Feature 1 (Device entity, create, list and details) was built on branch <code>feature/1-device-create-list-view</code>, reviewed and merged through pull requests.</p>
+<table class="check"><tr><th>Deliverable required by the sheet</th><th>Shown in this report</th></tr><tr><td>Working feature 1</td><td>Figures 5.1-5.4 (screens of the running feature)</td></tr><tr><td>Feature branch</td><td>Figure 5.5 (git log / branch), 4 commits</td></tr><tr><td>Pull request</td><td>Figures 5.6-5.7 (PR #1 into develop/main, PR #2)</td></tr><tr><td>Review comments</td><td>Figure 5.8</td></tr><tr><td>Merge evidence</td><td>Figures 5.6-5.7 (Merged badge, merge commit)</td></tr></table>
+<figure><img src="shots/app_06_create_form.png" style="max-width:75%"><figcaption>Figure 5.1 - Create device form</figcaption></figure><figure><img src="shots/app_07_validation_errors.png" style="max-width:75%"><figcaption>Figure 5.2 - Validation errors on an empty form</figcaption></figure><figure><img src="shots/app_09_devices_list.png" style="max-width:75%"><figcaption>Figure 5.3 - Device list (4 devices; compliance computed from the 3 controls)</figcaption></figure><figure><img src="shots/app_08_device_details.png" style="max-width:75%"><figcaption>Figure 5.4 - Device details page</figcaption></figure><figure><img src="shots/term_s05_feature_git.png"><figcaption>Figure 5.5 - Feature branch commits, pull/merge activity and remote</figcaption></figure><figure><img src="shots/gh_pr1.png"><figcaption>Figure 5.6 - Pull request #1 (feature branch) - merged</figcaption></figure><figure><img src="shots/gh_pr2.png"><figcaption>Figure 5.7 - Pull request #2 into develop - merged</figcaption></figure><figure><img src="shots/gh_pr1_review.png"><figcaption>Figure 5.8 - Review comment on the feature-1 pull request</figcaption></figure>
+</section>
+<section class="step">
+<div class="stephead"><span class="num">STEP 6</span><h2>MVP Completion and Git Collaboration</h2></div>
+<div class="task"><b>Task given:</b> Implement the remaining essential MVP functions for the Device Compliance Management Portal: create, view, update and search records; role-based status workflow; summary dashboard. Demonstrate a second feature branch, conflict creation/resolution, tagging and a release-ready source baseline.</div>
+<div class="deliv"><b>Deliverable required:</b> Functional MVP, resolved merge conflict, tagged version and updated backlog.</div>
+<p>Remaining MVP functions were built on two further branches: <code>feature/2-update-search-dashboard</code> and <code>feature/3-roles-workflow</code>. A real merge conflict between them was created and resolved, and release <b>v1.0.0</b> was tagged.</p>
+<table class="check"><tr><th>Deliverable required by the sheet</th><th>Shown in this report</th></tr><tr><td>Functional MVP</td><td>Figures 6.1-6.8 (update, search, roles, workflow, history, dashboard)</td></tr><tr><td>Second feature branch</td><td>Figure 6.9 (PR #3 and PR #4)</td></tr><tr><td>Resolved merge conflict</td><td>Figures 6.10-6.11 (git log, resolution commit, PR #4)</td></tr><tr><td>Tagged version</td><td>Figures 6.12-6.13 (tag v1.0.0, release PR #5)</td></tr><tr><td>Updated backlog</td><td>Table below (docs/06)</td></tr></table>
+<figure><img src="shots/app_12_edit_form.png" style="max-width:70%"><figcaption>Figure 6.1 - Update device (edit form)</figcaption></figure><figure><img src="shots/app_10_search_lab.png" style="max-width:70%"><figcaption>Figure 6.2 - Search for &#x27;lab&#x27; (name/owner/status filter)</figcaption></figure><figure><img src="shots/app_03_login.png" style="max-width:60%"><figcaption>Figure 6.3 - Login page (roles ADMIN / AUDITOR / TECHNICIAN)</figcaption></figure><figure><img src="shots/app_11_details_admin_view.png" style="max-width:70%"><figcaption>Figure 6.4 - Admin view of a device before any workflow action</figcaption></figure><figure><img src="shots/app_13_technician_moved_under_review.png" style="max-width:70%"><figcaption>Figure 6.5 - Technician moves REPORTED -&gt; UNDER_REVIEW</figcaption></figure><figure><img src="shots/app_14_technician_remediated_history.png" style="max-width:70%"><figcaption>Figure 6.6 - Technician moves to REMEDIATED; history is recorded</figcaption></figure><figure><img src="shots/app_15_auditor_can_close.png" style="max-width:70%"><figcaption>Figure 6.7 - Auditor sees the only allowed action: close</figcaption></figure><figure><img src="shots/app_17_dashboard.png" style="max-width:70%"><figcaption>Figure 6.8 - Summary dashboard</figcaption></figure><figure><img src="shots/gh_pr3.png"><figcaption>Figure 6.9a - PR #3 (feature/2) merged into develop</figcaption></figure><figure><img src="shots/gh_pr4.png"><figcaption>Figure 6.9b - PR #4 (feature/3) merged after conflict resolution</figcaption></figure><figure><img src="shots/term_s06_conflict_merge_p1.png"><figcaption>Figure 6.10 - Merge history and the conflict-resolution commit bb8f57f (part 1)</figcaption></figure><figure><img src="shots/term_s06_conflict_merge_p2.png"><figcaption>Figure 6.10 - Merge history and the conflict-resolution commit bb8f57f (part 2)</figcaption></figure><h3>The conflict</h3><p>Both branches edited the header line of <code>src/main/resources/templates/devices/list.html</code> (feature/2 added the Dashboard link and search form; feature/3 added the logged-in user and Logout). Merging <code>origin/develop</code> into feature/3 reported <code>CONFLICT (content): Merge conflict in src/main/resources/templates/devices/list.html</code>; the resolution kept both changes and the feature/2 tests were updated to log in. 11 tests passed afterwards.</p><figure><img src="shots/gh_commit_conflict.png"><figcaption>Figure 6.11 - Resolution commit on GitHub</figcaption></figure><figure><img src="shots/gh_tags.png"><figcaption>Figure 6.12 - Tag v1.0.0</figcaption></figure><figure><img src="shots/gh_pr5.png"><figcaption>Figure 6.13 - Release PR #5 into main</figcaption></figure><h3>Updated backlog (end of sprint 3)</h3><h4>1. Updated Backlog (end of Sprint 3)</h4>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Task</th>
+<th>Status</th>
+<th>Delivered in</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Project skeleton (Spring Boot, Maven)</td>
+<td>Done</td>
+<td>main (initial commits)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Device entity &amp; repository</td>
+<td>Done</td>
+<td>PR #1 <code>feature/1-device-create-list-view</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Create device form</td>
+<td>Done</td>
+<td>PR #1</td>
+</tr>
+<tr>
+<td>4</td>
+<td>List/view devices</td>
+<td>Done</td>
+<td>PR #1</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Device details page</td>
+<td>Done</td>
+<td>PR #1</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Update device</td>
+<td>Done</td>
+<td>PR #3 <code>feature/2-update-search-dashboard</code></td>
+</tr>
+<tr>
+<td>7</td>
+<td>Search/filter (name, owner, status)</td>
+<td>Done</td>
+<td>PR #3</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Compliance rule evaluation</td>
+<td>Done (simplified)</td>
+<td>PR #1 – antivirus + disk encryption + firewall. <strong>OS-version rule deferred</strong> to backlog</td>
+</tr>
+<tr>
+<td>9</td>
+<td>User roles &amp; login (BCrypt, session)</td>
+<td>Done</td>
+<td>PR #4 <code>feature/3-roles-workflow</code></td>
+</tr>
+<tr>
+<td>10</td>
+<td>Status workflow with role checks</td>
+<td>Done</td>
+<td>PR #4</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Status history log</td>
+<td>Done</td>
+<td>PR #4</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Summary dashboard</td>
+<td>Done</td>
+<td>PR #3</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Input validation &amp; error pages</td>
+<td>Done (validation); custom error pages deferred</td>
+<td>PR #1</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Health endpoint</td>
+<td>Done</td>
+<td><code>/actuator/health</code></td>
+</tr>
+<tr>
+<td>15</td>
+<td>README &amp; documentation</td>
+<td>Done (docs 01-06, README)</td>
+<td>main</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Carried over to next backlog:</strong> OS-version compliance rule, custom error pages, REST/JSON API docs.</p>
+<h4>2. Role matrix (implemented)</h4>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Allowed status moves</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TECHNICIAN</td>
+<td>REPORTED → UNDER_REVIEW → REMEDIATED</td>
+</tr>
+<tr>
+<td>AUDITOR</td>
+<td>REMEDIATED → CLOSED, REMEDIATED → UNDER_REVIEW (reopen)</td>
+</tr>
+<tr>
+<td>ADMIN</td>
+<td>all of the above</td>
+</tr>
+</tbody>
+</table>
+<p>Demo users (seeded, passwords stored as BCrypt hashes): <code>admin/admin123</code>, <code>auditor/auditor123</code>, <code>tech/tech123</code>.
+These are demo credentials for the coursework only.</p>
+</section>
+<section class="step">
+<div class="stephead"><span class="num">STEP 7</span><h2>Jenkins Installation and Continuous Integration Job</h2></div>
+<div class="task"><b>Task given:</b> Install and configure Jenkins. Connect the Device Compliance Management Portal GitHub repository and create a Maven/Gradle/Ant build job triggered by commit or scheduled polling. Archive the build artefact.</div>
+<div class="deliv"><b>Deliverable required:</b> Configured Jenkins job, successful build log, trigger evidence and archived artefact.</div>
+<p>Jenkins 2.580 (LTS) runs from the WAR on port 9090 using JDK 21; the project itself is built with JDK 11 and Maven 3.9.9. Freestyle job <code>dcmp-ci</code> polls the repository (<code>H/2 * * * *</code>) and builds on every change.</p>
+<table class="check"><tr><th>Deliverable required by the sheet</th><th>Shown in this report</th></tr><tr><td>Configured Jenkins job</td><td>Figures 7.1-7.2</td></tr><tr><td>Successful build log</td><td>Figures 7.3-7.4</td></tr><tr><td>Trigger evidence</td><td>Figure 7.5: 'Started by an SCM change' + polling log</td></tr><tr><td>Archived artefact</td><td>Figure 7.6</td></tr></table>
+<figure><img src="shots/jk_dashboard.png"><figcaption>Figure 7.1 - Jenkins dashboard with the jobs</figcaption></figure><figure><img src="shots/jk_ci_job.png"><figcaption>Figure 7.2 - Job dcmp-ci: status, last build, archived WAR, test result trend</figcaption></figure><figure><img src="shots/jk_ci_console.png"><figcaption>Figure 7.3 - Console output of a successful build</figcaption></figure><figure><img src="shots/term_s07_jenkins_ci.png"><figcaption>Figure 7.4 - Build log excerpt: SCM trigger, Git checkout, 11 tests, BUILD SUCCESS, archiving</figcaption></figure><figure><img src="shots/term_s07_polling.png"><figcaption>Figure 7.5 - Git polling log (trigger evidence)</figcaption></figure><figure><img src="shots/jk_ci_artifacts.png"><figcaption>Figure 7.6 - Archived build artefact (WAR)</figcaption></figure><h3>Job configuration (config.xml excerpt)</h3><pre class="code">Source: https://github.com/Athdam05/device-compliance-portal.git   branch: */develop
+Trigger: Poll SCM  H/2 * * * *
+Build step: set JAVA_HOME=JDK 11; mvn -B clean package
+Post-build: archive target/*.war ; publish JUnit results target/surefire-reports/*.xml</pre>
+</section>
+<section class="step">
+<div class="stephead"><span class="num">STEP 8</span><h2>Pipeline as Code and Server Deployment</h2></div>
+<div class="task"><b>Task given:</b> Create a Jenkinsfile for the Device Compliance Management Portal with checkout, build, package and deploy stages. Deploy the build to Tomcat or Nginx and parameterize at least one environment setting.</div>
+<div class="deliv"><b>Deliverable required:</b> Jenkinsfile, successful pipeline run, deployed application URL/screenshot and configuration evidence.</div>
+<p><code>Jenkinsfile</code> in the repository root defines the pipeline. Apache Tomcat 9.0.98 (port 8081) is the deployment target. The environment is parameterised: Jenkins parameter <code>DEPLOY_ENV</code> (dev / qa) selects the Spring profile (<code>application-dev.properties</code>, <code>application-qa.properties</code>), and <code>APP_CONTEXT</code> sets the context path.</p>
+<table class="check"><tr><th>Deliverable required by the sheet</th><th>Shown in this report</th></tr><tr><td>Jenkinsfile</td><td>Listing below (current version; stages Checkout, Build, Package, Deploy, Verify)</td></tr><tr><td>Successful pipeline run</td><td>Figures 8.1-8.2</td></tr><tr><td>Deployed application URL/screenshot</td><td>Figures 8.3-8.4</td></tr><tr><td>Configuration evidence (parameter)</td><td>Figures 8.5-8.6</td></tr></table>
+<div class="codehead">Jenkinsfile (repository root)</div><pre class="code">// Step 8 - Pipeline as Code: checkout -&gt; build -&gt; package -&gt; deploy to Tomcat.
+// Runs on the local Jenkins node (Windows). Tool locations are parameters/env so they can be changed in one place.
+pipeline {
+    agent any
+
+    parameters {
+        // Parameterised environment setting: selects the Spring profile (application-&lt;env&gt;.properties)
+        choice(name: &#x27;DEPLOY_ENV&#x27;, choices: [&#x27;dev&#x27;, &#x27;qa&#x27;], description: &#x27;Target environment / Spring profile&#x27;)
+        string(name: &#x27;APP_CONTEXT&#x27;, defaultValue: &#x27;dcmp&#x27;, description: &#x27;Tomcat context path for the WAR&#x27;)
+    }
+
+    environment {
+        JAVA_HOME   = &#x27;C:\\Program Files\\Eclipse Adoptium\\jdk-11.0.32.101-hotspot&#x27;
+        MVN         = &#x27;C:\\Users\\damal\\tools\\apache-maven-3.9.9\\bin\\mvn.cmd&#x27;
+        TOMCAT_HOME = &#x27;C:\\Users\\damal\\tools\\apache-tomcat-9.0.98&#x27;
+        EDGE_DRIVER = &#x27;C:\\Users\\damal\\tools\\edgedriver\\msedgedriver.exe&#x27;
+        TEST_PORT   = &#x27;8082&#x27;
+        REGISTRY       = &#x27;localhost:5000&#x27;
+        IMAGE_NAME     = &#x27;dcmp&#x27;
+        APP_VERSION    = &quot;1.0.${BUILD_NUMBER}&quot;
+        CONTAINER_NAME = &#x27;dcmp-app&#x27;
+        DOCKER_PORT    = &#x27;8092&#x27;
+        CATALINA_HOME = &quot;${TOMCAT_HOME}&quot;
+        CATALINA_PID_DIR = &quot;${TOMCAT_HOME}\\temp&quot;
+    }
+
+    options {
+        timestamps()
+        disableConcurrentBuilds()
+    }
+
+    stages {
+        stage(&#x27;Checkout&#x27;) {
+            steps {
+                checkout scm
+                bat &#x27;git log --oneline -1&#x27;
+            }
+        }
+
+        stage(&#x27;Build&#x27;) {
+            steps {
+                bat &#x27;&quot;%MVN%&quot; -B clean package&#x27;
+            }
+            post {
+                always {
+                    junit &#x27;target/surefire-reports/*.xml&#x27;
+                }
+            }
+        }
+
+        stage(&#x27;Package&#x27;) {
+            steps {
+                // Version the artefact with the Jenkins build number
+                bat &#x27;copy /Y target\\device-compliance-portal-0.1.0-SNAPSHOT.war target\\%APP_CONTEXT%.war&#x27;
+                archiveArtifacts artifacts: &#x27;target/*.war&#x27;, fingerprint: true
+            }
+        }
+
+        stage(&#x27;Selenium Tests&#x27;) {
+            // Start the freshly built app on a private port with a throw-away in-memory database,
+            // run the browser tests against it and ALWAYS stop it again. A failure here stops the
+            // pipeline, so the Deploy stage below is never reached with a broken build.
+            steps {
+                bat &#x27;&#x27;&#x27;
+                    if exist selenium.pid del selenium.pid
+                    powershell -NoProfile -Command &quot;$p = Start-Process -FilePath &#x27;%JAVA_HOME%\\bin\\java.exe&#x27; -ArgumentList &#x27;-jar&#x27;,&#x27;target\\device-compliance-portal-0.1.0-SNAPSHOT.war&#x27;,&#x27;--server.port=%TEST_PORT%&#x27;,&#x27;--spring.datasource.url=jdbc:h2:mem:seleniumdb&#x27; -PassThru -WindowStyle Hidden; $p.Id | Out-File -Encoding ascii selenium.pid&quot;
+                &#x27;&#x27;&#x27;
+                bat &#x27;&#x27;&#x27;
+                    @echo off
+                    set /a tries=0
+                    :wait
+                    curl -s -f http://localhost:%TEST_PORT%/actuator/health &amp;&amp; goto up
+                    set /a tries+=1
+                    if %tries% GEQ 30 exit /b 1
+                    ping -n 3 127.0.0.1 &gt; nul
+                    goto wait
+                    :up
+                    echo.
+                    echo Test instance is up on port %TEST_PORT%
+                &#x27;&#x27;&#x27;
+                bat &#x27;&quot;%MVN%&quot; -B failsafe:integration-test failsafe:verify -Pselenium -Dbase.url=http://localhost:%TEST_PORT% -Dwebdriver.edge.driver=&quot;%EDGE_DRIVER%&quot;&#x27;
+            }
+            post {
+                always {
+                    junit testResults: &#x27;target/failsafe-reports/*.xml&#x27;, allowEmptyResults: true
+                    archiveArtifacts artifacts: &#x27;target/screenshots/*.png&#x27;, allowEmptyArchive: true
+                    bat &#x27;&#x27;&#x27;
+                        if exist selenium.pid (
+                          for /f %%p in (selenium.pid) do taskkill /F /PID %%p
+                          del selenium.pid
+                        )
+                        exit /b 0
+                    &#x27;&#x27;&#x27;
+                }
+            }
+        }
+
+        stage(&#x27;Deploy&#x27;) {
+            steps {
+                // 1. Tell Tomcat which environment (Spring profile) to run with
+                bat &#x27;&#x27;&#x27;
+                    &gt; &quot;%TOMCAT_HOME%\\bin\\setenv.bat&quot; echo set &quot;JAVA_HOME=%JAVA_HOME%&quot;
+                    &gt;&gt; &quot;%TOMCAT_HOME%\\bin\\setenv.bat&quot; echo set &quot;JAVA_OPTS=-Dspring.profiles.active=%DEPLOY_ENV%&quot;
+                &#x27;&#x27;&#x27;
+                // 2. Stop Tomcat if it is running (ignore errors when it is already stopped)
+                bat &#x27;&#x27;&#x27;
+                    call &quot;%TOMCAT_HOME%\\bin\\shutdown.bat&quot;
+                    ping -n 8 127.0.0.1 &gt; nul
+                    exit /b 0
+                &#x27;&#x27;&#x27;
+                // 3. Replace the deployed application
+                bat &#x27;&#x27;&#x27;
+                    if exist &quot;%TOMCAT_HOME%\\webapps\\%APP_CONTEXT%&quot; rmdir /S /Q &quot;%TOMCAT_HOME%\\webapps\\%APP_CONTEXT%&quot;
+                    copy /Y target\\%APP_CONTEXT%.war &quot;%TOMCAT_HOME%\\webapps\\%APP_CONTEXT%.war&quot;
+                &#x27;&#x27;&#x27;
+                // 4. Start Tomcat detached so the Jenkins build can finish
+                bat &#x27;&#x27;&#x27;
+                    set &quot;BUILD_ID=dontKillMe&quot;
+                    set &quot;JENKINS_NODE_COOKIE=dontKillMe&quot;
+                    start &quot;tomcat&quot; /B cmd /c &quot;&quot;%TOMCAT_HOME%\\bin\\catalina.bat&quot; run &gt; &quot;%TOMCAT_HOME%\\logs\\jenkins-run.log&quot; 2&gt;&amp;1&quot;
+                    exit /b 0
+                &#x27;&#x27;&#x27;
+            }
+        }
+
+        stage(&#x27;Verify&#x27;) {
+            steps {
+                // Wait for the app to come up, then check health
+                bat &#x27;&#x27;&#x27;
+                    @echo off
+                    set /a tries=0
+                    :wait
+                    curl -s -f http://localhost:8081/%APP_CONTEXT%/actuator/health &amp;&amp; goto ok
+                    set /a tries+=1
+                    if %tries% GEQ 30 exit /b 1
+                    ping -n 4 127.0.0.1 &gt; nul
+                    goto wait
+                    :ok
+                    echo.
+                    echo Deployed: http://localhost:8081/%APP_CONTEXT%/ ^(env=%DEPLOY_ENV%^)
+                &#x27;&#x27;&#x27;
+            }
+        }
+
+        // ---- Step 12: continuous deployment with Docker (only reached when every stage above passed) ----
+        stage(&#x27;Docker Build&#x27;) {
+            steps {
+                // Versioned image: 1.0.&lt;build number&gt;; &quot;latest&quot; always points at the newest good build
+                bat &#x27;&#x27;&#x27;
+                    docker build --label git.commit=%GIT_COMMIT% -t %REGISTRY%/%IMAGE_NAME%:%APP_VERSION% -t %REGISTRY%/%IMAGE_NAME%:latest .
+                    docker image ls %REGISTRY%/%IMAGE_NAME%
+                &#x27;&#x27;&#x27;
+            }
+        }
+
+        stage(&#x27;Docker Push&#x27;) {
+            steps {
+                bat &#x27;&#x27;&#x27;
+                    docker push %REGISTRY%/%IMAGE_NAME%:%APP_VERSION%
+                    docker push %REGISTRY%/%IMAGE_NAME%:latest
+                    echo Tags now in the registry:
+                    curl -s http://%REGISTRY%/v2/%IMAGE_NAME%/tags/list
+                &#x27;&#x27;&#x27;
+            }
+        }
+
+        stage(&#x27;Docker Deploy&#x27;) {
+            steps {
+                // Replace the running container with a fresh one created from the image pulled back out of the registry
+                bat &#x27;&#x27;&#x27;
+                    docker rm -f %CONTAINER_NAME% 2&gt;nul
+                    docker pull %REGISTRY%/%IMAGE_NAME%:%APP_VERSION%
+                    docker run -d --name %CONTAINER_NAME% --restart unless-stopped -p %DOCKER_PORT%:8080 -v dcmp-app-data:/data -e SPRING_PROFILES_ACTIVE=%DEPLOY_ENV% %REGISTRY%/%IMAGE_NAME%:%APP_VERSION%
+                    exit /b 0
+                &#x27;&#x27;&#x27;
+                bat &#x27;&#x27;&#x27;
+                    @echo off
+                    set /a tries=0
+                    :wait
+                    curl -s -f http://localhost:%DOCKER_PORT%/actuator/health &amp;&amp; goto ok
+                    set /a tries+=1
+                    if %tries% GEQ 30 exit /b 1
+                    ping -n 4 127.0.0.1 &gt; nul
+                    goto wait
+                    :ok
+                    echo.
+                    echo Container %CONTAINER_NAME% is healthy: http://localhost:%DOCKER_PORT%/ ^(image %APP_VERSION%, env=%DEPLOY_ENV%^)
+                    docker ps --filter name=%CONTAINER_NAME%
+                &#x27;&#x27;&#x27;
+            }
+        }
+    }
+
+    post {
+        success { echo &quot;Deployed to http://localhost:8081/${params.APP_CONTEXT}/ (env=${params.DEPLOY_ENV})&quot; }
+        failure { echo &#x27;Pipeline failed - see stage logs&#x27; }
+    }
+}
+</pre><figure><img src="shots/jk_pipe_overview.png"><figcaption>Figure 8.1 - Pipeline job: stage view of successful runs</figcaption></figure><figure><img src="shots/term_s08_pipeline_run.png"><figcaption>Figure 8.2 - Console excerpt of pipeline build #1: all stages passed, deployed to Tomcat</figcaption></figure><figure><img src="shots/app_01_home_tomcat.png" style="max-width:70%"><figcaption>Figure 8.3 - Deployed application at http://localhost:8081/dcmp/ (Environment = DEV)</figcaption></figure><figure><img src="shots/app_02_health_tomcat.png" style="max-width:55%"><figcaption>Figure 8.4 - Health check of the Tomcat deployment</figcaption></figure><figure><img src="shots/jk_pipe_params.png"><figcaption>Figure 8.5 - Parameters used by a pipeline run (DEPLOY_ENV = dev, APP_CONTEXT = dcmp) - the parameterised environment setting</figcaption></figure><div class="codehead">application-dev.properties  (qa profile sets app.environment=QA)</div><pre class="code">app.environment=DEV
+</pre>
+</section>
+<section class="step">
+<div class="stephead"><span class="num">STEP 9</span><h2>Selenium Test Design and Local Execution</h2></div>
+<div class="task"><b>Task given:</b> Identify three to five critical user journeys in the Device Compliance Management Portal. Write Selenium WebDriver test cases with assertions, test data and screenshots for failures. Execute the suite locally through Maven.</div>
+<div class="deliv"><b>Deliverable required:</b> Test plan, Selenium scripts, local test report and failure screenshot mechanism.</div>
+<p>Five critical user journeys (six tests) are automated with Selenium WebDriver 4.21 in Microsoft Edge, run through Maven Failsafe (<code>mvn verify -Pselenium</code>). Detailed plan: <code>docs/09-selenium-test-plan.md</code>.</p>
+<table class="check"><tr><th>Deliverable required by the sheet</th><th>Shown in this report</th></tr><tr><td>Test plan</td><td>Tables below</td></tr><tr><td>Selenium scripts</td><td>Listings below</td></tr><tr><td>Local test report</td><td>Figure 9.1</td></tr><tr><td>Failure screenshot mechanism</td><td>Listing + Figure 9.2 (real failure screenshot)</td></tr></table>
+<h4>1. Critical user journeys</h4>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Journey</th>
+<th>Why it is critical</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>J1</td>
+<td>Invalid login is rejected; valid login reaches the device list</td>
+<td>Gate to the whole application</td>
+</tr>
+<tr>
+<td>J2</td>
+<td>Register a device; details page shows COMPLIANT / NON_COMPLIANT</td>
+<td>Core feature + compliance rule</td>
+</tr>
+<tr>
+<td>J3</td>
+<td>Search finds a registered device and shows "No devices found" for a miss</td>
+<td>Core feature (US4)</td>
+</tr>
+<tr>
+<td>J4</td>
+<td>Technician moves a device to UNDER_REVIEW; history row recorded; no "Close" option</td>
+<td>Role-based workflow (US7, US8)</td>
+</tr>
+<tr>
+<td>J5</td>
+<td>Dashboard totals are consistent (total = compliant + non-compliant)</td>
+<td>Management summary (US9)</td>
+</tr>
+</tbody>
+</table>
+<h4>2. Test data</h4>
+<p>Each test creates its own device with a unique serial (<code>SEL-&lt;nanoTime&gt;</code>), so tests are independent and repeatable.
+Demo users (seeded): <code>admin/admin123</code>, <code>tech/tech123</code>.</p>
+<h4>3. Test cases</h4>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Steps</th>
+<th>Assertion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>j1_invalidLoginIsRejected…</code></td>
+<td>login with wrong password; login admin/admin123</td>
+<td><code>#login-error</code> contains "Invalid"; URL ends with <code>/devices</code>; <code>#who</code> shows ADMIN</td>
+</tr>
+<tr>
+<td><code>j2_registerCompliantDevice…</code></td>
+<td>create device with all 3 controls ticked</td>
+<td><code>#device-name</code> equals name; <code>#compliance</code> = COMPLIANT</td>
+</tr>
+<tr>
+<td><code>j2_registerDeviceWithMissingControls…</code></td>
+<td>create device with only antivirus</td>
+<td><code>#compliance</code> = NON_COMPLIANT</td>
+</tr>
+<tr>
+<td><code>j3_searchFinds…</code></td>
+<td>create device; search by name; search for nonsense</td>
+<td>table contains name; table contains "No devices found"</td>
+</tr>
+<tr>
+<td><code>j4_technicianCanMove…</code></td>
+<td>admin creates device; logout; tech moves to UNDER_REVIEW</td>
+<td><code>#status</code> = UNDER_REVIEW; history row by <code>tech</code>; no <code>#to-CLOSED</code></td>
+</tr>
+<tr>
+<td><code>j5_dashboardShowsSummaryCounts</code></td>
+<td>create non-compliant device; open dashboard</td>
+<td>total ≥ 1; total = compliant + non-compliant</td>
+</tr>
+</tbody>
+</table>
+<h4>4. Failure screenshot mechanism</h4>
+<p><code>BaseSeleniumIT</code> registers a JUnit 5 <code>TestExecutionExceptionHandler</code>. When any test throws, it saves
+<code>target/screenshots/&lt;TestClass&gt;_&lt;testMethod&gt;.png</code> <strong>before</strong> the browser is closed, then rethrows the failure.
+(An earlier version used <code>TestWatcher</code>, which runs after <code>@AfterEach</code> has closed the browser and produced no
+screenshots — this was found and fixed during development.)</p><div class="codehead">UserJourneysIT.java - the test cases</div><pre class="code">package com.dcmp.portal.selenium;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.By;
+
+/** Critical user journeys (see docs/09-selenium-test-plan.md). */
+class UserJourneysIT extends BaseSeleniumIT {
+
+    // J1 - authentication
+    @Test
+    void j1_invalidLoginIsRejectedAndValidLoginReachesDeviceList() {
+        login(&quot;admin&quot;, &quot;wrong-password&quot;);
+        assertTrue(driver.findElement(By.id(&quot;login-error&quot;)).getText().contains(&quot;Invalid&quot;));
+
+        login(&quot;admin&quot;, &quot;admin123&quot;);
+        assertTrue(driver.getCurrentUrl().endsWith(&quot;/devices&quot;), &quot;expected device list, was &quot; + driver.getCurrentUrl());
+        assertTrue(driver.findElement(By.id(&quot;who&quot;)).getText().contains(&quot;ADMIN&quot;));
+    }
+
+    // J2 - register a device and see its compliance result
+    @Test
+    void j2_registerCompliantDeviceShowsCompliantOnDetails() {
+        login(&quot;admin&quot;, &quot;admin123&quot;);
+        String name = createDevice(&quot;J2&quot;, true, true, true);
+        assertEquals(name, driver.findElement(By.id(&quot;device-name&quot;)).getText());
+        assertEquals(&quot;COMPLIANT&quot;, driver.findElement(By.id(&quot;compliance&quot;)).getText());
+    }
+
+    @Test
+    void j2_registerDeviceWithMissingControlsIsNonCompliant() {
+        login(&quot;admin&quot;, &quot;admin123&quot;);
+        createDevice(&quot;J2b&quot;, true, false, false);
+        assertEquals(&quot;NON_COMPLIANT&quot;, driver.findElement(By.id(&quot;compliance&quot;)).getText());
+    }
+
+    // J3 - search
+    @Test
+    void j3_searchFindsRegisteredDeviceAndHidesOthers() {
+        login(&quot;admin&quot;, &quot;admin123&quot;);
+        String name = createDevice(&quot;J3&quot;, true, true, true);
+
+        search(name);
+        String table = driver.findElement(By.tagName(&quot;table&quot;)).getText();
+        assertTrue(table.contains(name));
+
+        search(&quot;no-such-device-xyz&quot;);
+        assertTrue(driver.findElement(By.tagName(&quot;table&quot;)).getText().contains(&quot;No devices found&quot;));
+    }
+
+    // J4 - role-based workflow
+    @Test
+    void j4_technicianCanMoveToUnderReviewAndHistoryIsRecorded() {
+        login(&quot;admin&quot;, &quot;admin123&quot;);
+        createDevice(&quot;J4&quot;, true, true, true);
+        String detailsUrl = driver.getCurrentUrl();
+        open(&quot;/devices&quot;);
+        clickAndWait(By.id(&quot;logout&quot;));
+
+        login(&quot;tech&quot;, &quot;tech123&quot;);
+        driver.get(detailsUrl);
+        clickAndWait(By.id(&quot;to-UNDER_REVIEW&quot;));
+        assertEquals(&quot;UNDER_REVIEW&quot;, driver.findElement(By.id(&quot;status&quot;)).getText());
+        assertTrue(driver.findElement(By.xpath(&quot;//table//td[text()=&#x27;tech&#x27;]&quot;)).isDisplayed());
+        assertTrue(driver.findElements(By.id(&quot;to-CLOSED&quot;)).isEmpty(), &quot;technician must not see Close&quot;);
+    }
+
+    // J5 - dashboard
+    @Test
+    void j5_dashboardShowsSummaryCounts() {
+        login(&quot;admin&quot;, &quot;admin123&quot;);
+        createDevice(&quot;J5&quot;, false, false, false);
+        open(&quot;/dashboard&quot;);
+        int total = Integer.parseInt(driver.findElement(By.id(&quot;total&quot;)).getText());
+        int compliant = Integer.parseInt(driver.findElement(By.id(&quot;compliant&quot;)).getText());
+        int non = Integer.parseInt(driver.findElement(By.id(&quot;non-compliant&quot;)).getText());
+        assertTrue(total &gt;= 1);
+        assertEquals(total, compliant + non);
+    }
+}
+</pre><div class="codehead">BaseSeleniumIT.java - browser setup, waits and failure screenshot</div><pre class="code">package com.dcmp.portal.selenium;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.RegisterExtension;
+import org.junit.jupiter.api.extension.TestExecutionExceptionHandler;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
+
+/**
+ * Base class for browser tests. The application under test is addressed by the
+ * {@code base.url} system property (default: the Tomcat deployment from step 8).
+ * A screenshot is written to target/screenshots/ whenever a test fails.
+ */
+abstract class BaseSeleniumIT {
+
+    static final String BASE_URL = System.getProperty(&quot;base.url&quot;, &quot;http://localhost:8081/dcmp&quot;);
+
+    protected WebDriver driver;
+
+    /** Runs while the browser is still open (before @AfterEach), so the failure screenshot shows the real page. */
+    @RegisterExtension
+    final TestExecutionExceptionHandler screenshotOnFailure = new TestExecutionExceptionHandler() {
+        @Override
+        public void handleTestExecutionException(ExtensionContext context, Throwable throwable) throws Throwable {
+            saveScreenshot(context.getRequiredTestClass().getSimpleName() + &quot;_&quot; + context.getRequiredTestMethod().getName());
+            throw throwable;
+        }
+    };
+
+    @BeforeEach
+    void startBrowser() {
+        EdgeOptions options = new EdgeOptions();
+        if (!&quot;false&quot;.equals(System.getProperty(&quot;headless&quot;, &quot;true&quot;))) {
+            options.addArguments(&quot;--headless=new&quot;);
+        }
+        options.addArguments(&quot;--window-size=1280,900&quot;, &quot;--no-sandbox&quot;, &quot;--remote-allow-origins=*&quot;);
+        driver = new EdgeDriver(options);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+    }
+
+    @AfterEach
+    void stopBrowser() {
+        if (driver != null) {
+            driver.quit();
+        }
+    }
+
+    protected void open(String path) {
+        driver.get(BASE_URL + path);
+    }
+
+    /** Clicks an element and waits until the resulting page navigation has replaced it. */
+    protected void clickAndWait(By locator) {
+        WebElement element = driver.findElement(locator);
+        element.click();
+        new WebDriverWait(driver, Duration.ofSeconds(10)).until(d -&gt; isDetached(element));
+    }
+
+    /**</pre><figure><img src="shots/term_s09_selenium_local.png"><figcaption>Figure 9.1 - Local execution through Maven: 6 tests, 0 failures, plus per-test results</figcaption></figure><figure><img src="shots/selenium_failure_j2.png" style="max-width:70%"><figcaption>Figure 9.2 - Screenshot saved automatically by the framework when a test failed (J2, during step 10)</figcaption></figure>
+</section>
+<section class="step">
+<div class="stephead"><span class="num">STEP 10</span><h2>Continuous Testing in Jenkins</h2></div>
+<div class="task"><b>Task given:</b> Integrate the Device Compliance Management Portal Selenium suite into Jenkins. Publish test reports and configure the pipeline so failed tests stop deployment. Correct at least one deliberately introduced defect and rerun the pipeline.</div>
+<div class="deliv"><b>Deliverable required:</b> Jenkins test report, failed pipeline evidence, defect correction commit and successful rerun.</div>
+<p>The Selenium suite runs inside the pipeline between Package and Deploy: the build is started on port 8082 with a throw-away database, the tests run against it, results and failure screenshots are published, and a failure stops the pipeline so <b>Deploy is skipped</b>. A defect was introduced on purpose (compliance rule changed from AND to OR); it passes all unit tests, and only Selenium catches it.</p>
+<table class="check"><tr><th>Deliverable required by the sheet</th><th>Shown in this report</th></tr><tr><td>Jenkins test report</td><td>Figures 10.1, 10.4</td></tr><tr><td>Failed pipeline evidence</td><td>Figures 10.2-10.3</td></tr><tr><td>Defect correction commit</td><td>Figure 10.5 (diff of both commits)</td></tr><tr><td>Successful rerun</td><td>Figures 10.6-10.7</td></tr></table>
+<figure><img src="shots/jk_pipe_stageview.png"><figcaption>Figure 10.1 - Stage view of all pipeline runs. #3 is the deliberate defect (fails at Selenium); #2 was an earlier unplanned failure from a flaky test wait that was fixed; #4 and later are green</figcaption></figure><figure><img src="shots/jk_pipe_b3_stages.png"><figcaption>Figure 10.1b - Build #3 stages: red at Selenium Tests, Deploy and Verify skipped</figcaption></figure><figure><img src="shots/jk_pipe_b3_console.png"><figcaption>Figure 10.2 - Console of failed build #3: the AssertionFailedError (expected NON_COMPLIANT but was COMPLIANT)</figcaption></figure><figure><img src="shots/term_s10_fail_then_fix.png"><figcaption>Figure 10.3 - Failed build #3 and successful rerun #4 (log excerpts)</figcaption></figure><figure><img src="shots/jk_pipe_b3_tests.png"><figcaption>Figure 10.4 - Jenkins test report of the failed build: 1 failure (j2_registerDeviceWithMissingControls...)</figcaption></figure><figure><img src="shots/term_s10_defect_diff.png"><figcaption>Figure 10.5 - Defect commit 9cc7492 and the correction commit a1cfb33</figcaption></figure><figure><img src="shots/selenium_failure_j2.png" style="max-width:70%"><figcaption>Figure 10.6 - Failure screenshot archived by Jenkins for build #3</figcaption></figure><figure><img src="shots/jk_pipe_b4.png"><figcaption>Figure 10.7 - Build #4 after the fix: all stages green, 6/6 Selenium tests passed</figcaption></figure><figure><img src="shots/jk_pipe_b4_status.png"><figcaption>Figure 10.8 - Build #4 status page (commit a1cfb33, test result: no failures)</figcaption></figure><h4>3. Other findings during integration</h4>
+<table>
+<thead>
+<tr>
+<th>Run</th>
+<th>Problem</th>
+<th>Resolution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>#2</td>
+<td>J3 failed in <code>login</code> with <code>WebDriverException: Node with given id does not belong to the document</code></td>
+<td>Edge reports a replaced page this way instead of <code>StaleElementReferenceException</code>. <code>clickAndWait</code> now treats both as "page changed" (commit <code>eb4e69e</code>). Suite then passed 2/2 local runs and Jenkins #4.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section class="step">
+<div class="stephead"><span class="num">STEP 11</span><h2>Docker Image and Container Lifecycle</h2></div>
+<div class="task"><b>Task given:</b> Create a Dockerfile for the Device Compliance Management Portal. Build and tag the image, run the container, map ports, inspect logs, stop/restart/remove containers and document the complete container lifecycle.</div>
+<div class="deliv"><b>Deliverable required:</b> Dockerfile, image details, Docker command log and running container evidence.</div>
+<p>Multi-stage <code>Dockerfile</code> (Maven build stage, then Eclipse Temurin 11 JRE runtime stage, non-root user, health check). Image tagged <code>device-compliance-portal:1.0.0</code> and <code>:latest</code>.</p>
+<table class="check"><tr><th>Deliverable required by the sheet</th><th>Shown in this report</th></tr><tr><td>Dockerfile</td><td>Listing below</td></tr><tr><td>Image details</td><td>Figure 11.1</td></tr><tr><td>Docker command log (run, port map, logs, stop/restart/remove)</td><td>Figure 11.2</td></tr><tr><td>Running container evidence</td><td>Figures 11.3-11.4</td></tr><tr><td>Documented lifecycle</td><td>Table below</td></tr></table>
+<div class="codehead">Dockerfile</div><pre class="code"># Step 11 - container image for the Device Compliance Management Portal.
+# Two stages: Maven builds the WAR, a slim JRE image runs it (Spring Boot executable WAR, embedded Tomcat).
+
+# ---- build stage ----
+FROM maven:3.9.9-eclipse-temurin-11 AS build
+WORKDIR /build
+COPY pom.xml .
+RUN mvn -B -q dependency:go-offline
+COPY src ./src
+RUN mvn -B -q clean package -DskipTests
+
+# ---- runtime stage ----
+FROM eclipse-temurin:11-jre
+LABEL org.opencontainers.image.title=&quot;device-compliance-portal&quot; \
+      org.opencontainers.image.authors=&quot;Atharva Anand Damale (23102C0004)&quot;
+
+# run as an unprivileged user; /data holds the H2 database so it can be mounted as a volume
+RUN useradd --system --create-home dcmp &amp;&amp; mkdir /data &amp;&amp; chown dcmp /data
+USER dcmp
+WORKDIR /app
+COPY --from=build /build/target/device-compliance-portal-*.war app.war
+
+ENV PORT=8080 \
+    SPRING_PROFILES_ACTIVE=dev \
+    SPRING_DATASOURCE_URL=jdbc:h2:file:/data/dcmp;AUTO_SERVER=TRUE
+EXPOSE 8080
+VOLUME /data
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
+  CMD curl -fs http://localhost:${PORT}/actuator/health || exit 1
+
+ENTRYPOINT [&quot;java&quot;, &quot;-jar&quot;, &quot;app.war&quot;]
+</pre><figure><img src="shots/term_s11_image_details.png"><figcaption>Figure 11.1 - Image details (id, size, user, exposed port, layers)</figcaption></figure><figure><img src="shots/term_s11_lifecycle_log_p1.png"><figcaption>Figure 11.2 - Complete container lifecycle: run, health, inspect, logs, stop, start, restart, remove (part 1)</figcaption></figure><figure><img src="shots/term_s11_lifecycle_log_p2.png"><figcaption>Figure 11.2 - Complete container lifecycle: run, health, inspect, logs, stop, start, restart, remove (part 2)</figcaption></figure><figure><img src="shots/term_s11_lifecycle_log_p3.png"><figcaption>Figure 11.2 - Complete container lifecycle: run, health, inspect, logs, stop, start, restart, remove (part 3)</figcaption></figure><figure><img src="shots/app_18_home_docker_container.png" style="max-width:70%"><figcaption>Figure 11.3 - Application served from the container (host port mapped to container 8080)</figcaption></figure><figure><img src="shots/app_19_health_docker_container.png" style="max-width:55%"><figcaption>Figure 11.4 - Container health endpoint</figcaption></figure><h4>3. Container lifecycle (real run – full output in <a href="11-docker-command-log.txt">11-docker-command-log.txt</a>)</h4>
+<p>Reproducible with <code>bash scripts/docker-lifecycle-demo.sh</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Command</th>
+<th>Observed result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Create + start, map ports, mount volume</td>
+<td><code>docker run -d --name dcmp-demo -p 8090:8080 -v dcmp-data:/data device-compliance-portal:1.0.0</code></td>
+<td>container started</td>
+</tr>
+<tr>
+<td>Health</td>
+<td><code>curl http://localhost:8090/actuator/health</code></td>
+<td><code>{"status":"UP"}</code>; <code>docker ps</code> shows <code>Up … (healthy)</code>, <code>0.0.0.0:8090-&gt;8080/tcp</code></td>
+</tr>
+<tr>
+<td>Inspect</td>
+<td><code>docker inspect</code>, <code>docker stats --no-stream</code>, <code>docker exec dcmp-demo id</code></td>
+<td><code>status=running</code>, <code>health=healthy</code>, <code>uid=999(dcmp)</code></td>
+</tr>
+<tr>
+<td>Logs</td>
+<td><code>docker logs --tail 5 dcmp-demo</code></td>
+<td>Spring Boot startup lines</td>
+</tr>
+<tr>
+<td>Stop</td>
+<td><code>docker stop dcmp-demo</code></td>
+<td>status <code>Exited (143)</code> (SIGTERM, graceful)</td>
+</tr>
+<tr>
+<td>Start / restart</td>
+<td><code>docker start dcmp-demo</code>, <code>docker restart dcmp-demo</code></td>
+<td>health UP again</td>
+</tr>
+<tr>
+<td>Remove</td>
+<td><code>docker rm -f dcmp-demo</code></td>
+<td>container gone from <code>docker ps -a</code></td>
+</tr>
+<tr>
+<td>Clean up volume</td>
+<td><code>docker volume rm dcmp-data</code></td>
+<td>volume removed</td>
+</tr>
+</tbody>
+</table>
+<h3>Data persistence check</h3>
+<p>Created a device in a container with volume <code>dcmp-persist-data</code>, destroyed the container (<code>docker rm -f</code>), started a <strong>new</strong>
+container on the same volume and listed devices: the device <code>Persist-Check</code> was still present. (Test containers/volume removed afterwards.)</p>
+</section>
+<section class="step">
+<div class="stephead"><span class="num">STEP 12</span><h2>Jenkins-Docker Continuous Deployment</h2></div>
+<div class="task"><b>Task given:</b> Extend the Device Compliance Management Portal Jenkins pipeline to build a versioned Docker image, publish it to Docker Hub or a local registry and deploy a fresh container automatically after successful tests.</div>
+<div class="deliv"><b>Deliverable required:</b> Versioned image, registry evidence and end-to-end commit-to-container pipeline.</div>
+<p>Three Docker stages were added to the pipeline: <b>Docker Build</b> (tag 1.0.&lt;build number&gt;), <b>Docker Push</b> to a local registry (<code>registry:2</code> on localhost:5000) and <b>Docker Deploy</b> (stop old container, pull the new image back from the registry, run a fresh container on port 8092, health check). They run only after tests and Tomcat deployment passed.</p>
+<table class="check"><tr><th>Deliverable required by the sheet</th><th>Shown in this report</th></tr><tr><td>Versioned image</td><td>Figures 12.1-12.2 (tags 1.0.6, 1.0.7)</td></tr><tr><td>Registry evidence</td><td>Figure 12.2 (catalog and tag list from the registry API)</td></tr><tr><td>End-to-end commit-to-container pipeline</td><td>Figures 12.3-12.5 (build #7 was started by a Git commit, no manual click)</td></tr></table>
+<div class="codehead">Jenkinsfile - Docker stages</div><pre class="code">                    set &quot;BUILD_ID=dontKillMe&quot;
+                    set &quot;JENKINS_NODE_COOKIE=dontKillMe&quot;
+                    start &quot;tomcat&quot; /B cmd /c &quot;&quot;%TOMCAT_HOME%\\bin\\catalina.bat&quot; run &gt; &quot;%TOMCAT_HOME%\\logs\\jenkins-run.log&quot; 2&gt;&amp;1&quot;
+                    exit /b 0
+                &#x27;&#x27;&#x27;
+            }
+        }
+
+        stage(&#x27;Verify&#x27;) {
+            steps {
+                // Wait for the app to come up, then check health
+                bat &#x27;&#x27;&#x27;
+                    @echo off
+                    set /a tries=0
+                    :wait
+                    curl -s -f http://localhost:8081/%APP_CONTEXT%/actuator/health &amp;&amp; goto ok
+                    set /a tries+=1
+                    if %tries% GEQ 30 exit /b 1
+                    ping -n 4 127.0.0.1 &gt; nul
+                    goto wait
+                    :ok
+                    echo.
+                    echo Deployed: http://localhost:8081/%APP_CONTEXT%/ ^(env=%DEPLOY_ENV%^)
+                &#x27;&#x27;&#x27;
+            }
+        }
+
+        // ---- Step 12: continuous deployment with Docker (only reached when every stage above passed) ----
+        stage(&#x27;Docker Build&#x27;) {
+            steps {
+                // Versioned image: 1.0.&lt;build number&gt;; &quot;latest&quot; always points at the newest good build
+                bat &#x27;&#x27;&#x27;
+                    docker build --label git.commit=%GIT_COMMIT% -t %REGISTRY%/%IMAGE_NAME%:%APP_VERSION% -t %REGISTRY%/%IMAGE_NAME%:latest .
+                    docker image ls %REGISTRY%/%IMAGE_NAME%
+                &#x27;&#x27;&#x27;
+            }
+        }
+
+        stage(&#x27;Docker Push&#x27;) {
+            steps {
+                bat &#x27;&#x27;&#x27;
+                    docker push %REGISTRY%/%IMAGE_NAME%:%APP_VERSION%
+                    docker push %REGISTRY%/%IMAGE_NAME%:latest
+                    echo Tags now in the registry:
+                    curl -s http://%REGISTRY%/v2/%IMAGE_NAME%/tags/list
+                &#x27;&#x27;&#x27;
+            }
+        }
+
+        stage(&#x27;Docker Deploy&#x27;) {
+            steps {
+                // Replace the running container with a fresh one created from the image pulled back out of the registry
+                bat &#x27;&#x27;&#x27;
+                    docker rm -f %CONTAINER_NAME% 2&gt;nul
+                    docker pull %REGISTRY%/%IMAGE_NAME%:%APP_VERSION%
+                    docker run -d --name %CONTAINER_NAME% --restart unless-stopped -p %DOCKER_PORT%:8080 -v dcmp-app-data:/data -e SPRING_PROFILES_ACTIVE=%DEPLOY_ENV% %REGISTRY%/%IMAGE_NAME%:%APP_VERSION%
+                    exit /b 0
+                &#x27;&#x27;&#x27;
+                bat &#x27;&#x27;&#x27;
+                    @echo off
+                    set /a tries=0
+                    :wait
+                    curl -s -f http://localhost:%DOCKER_PORT%/actuator/health &amp;&amp; goto ok
+                    set /a tries+=1
+                    if %tries% GEQ 30 exit /b 1
+                    ping -n 4 127.0.0.1 &gt; nul
+                    goto wait
+                    :ok
+                    echo.
+                    echo Container %CONTAINER_NAME% is healthy: http://localhost:%DOCKER_PORT%/ ^(image %APP_VERSION%, env=%DEPLOY_ENV%^)
+                    docker ps --filter name=%CONTAINER_NAME%
+                &#x27;&#x27;&#x27;
+            }</pre><figure><img src="shots/term_s12_registry.png"><figcaption>Figure 12.1/12.2 - Registry catalog, tags, running container and the git.commit label on the image</figcaption></figure><figure><img src="shots/term_s12_docker_cd_p1.png"><figcaption>Figure 12.3 - Build #6 (manual) and build #7 (automatic, started by commit 386d8d0): stages and image tags (part 1)</figcaption></figure><figure><img src="shots/term_s12_docker_cd_p2.png"><figcaption>Figure 12.3 - Build #6 (manual) and build #7 (automatic, started by commit 386d8d0): stages and image tags (part 2)</figcaption></figure><figure><img src="shots/jk_pipe_stageview_docker.png"><figcaption>Figure 12.4 - Build #7 stages including Docker Build / Push / Deploy</figcaption></figure><figure><img src="shots/jk_pipe_b7.png"><figcaption>Figure 12.4b - Build #7 status page: &#x27;Started by an SCM change&#x27; (automatic commit-to-container run)</figcaption></figure><figure><img src="shots/app_18_home_docker_container.png" style="max-width:70%"><figcaption>Figure 12.5 - Application running in the freshly deployed container</figcaption></figure>
+</section>
+<section class="step">
+<div class="stephead"><span class="num">STEP 13</span><h2>Configuration Management Script</h2></div>
+<div class="task"><b>Task given:</b> Identify all server prerequisites for the Device Compliance Management Portal: packages, users, folders, files, ports and services. Create either a Puppet manifest/modules or an Ansible inventory and YAML playbook to configure the target node.</div>
+<div class="deliv"><b>Deliverable required:</b> Configuration specification, Puppet manifest or Ansible playbook and first execution log.</div>
+<p>Ansible (ansible-core 2.17, run from a container) configures a fresh Ubuntu 22.04 node reached over SSH. Source: <code>docs/13-configuration-management.md</code>, folder <code>ansible/</code>.</p>
+<table class="check"><tr><th>Deliverable required by the sheet</th><th>Shown in this report</th></tr><tr><td>Configuration specification</td><td>Table below (packages, user, folders, files, ports, services)</td></tr><tr><td>Ansible playbook + inventory</td><td>Listings below</td></tr><tr><td>First execution log</td><td>Figure 13.1 and raw log in repo</td></tr></table>
+<h4>1. Configuration specification – what the portal needs on a server</h4>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Requirement</th>
+<th>Ansible task</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Packages</strong></td>
+<td><code>openjdk-11-jre-headless</code> (the app is built for Java 11), <code>curl</code>, <code>ca-certificates</code>, <code>supervisor</code> (process manager)</td>
+<td><code>apt</code> – Install prerequisite packages</td>
+</tr>
+<tr>
+<td><strong>User / group</strong></td>
+<td>system group <code>dcmp</code> and unprivileged system user <code>dcmp</code> (shell <code>/usr/sbin/nologin</code>, home <code>/opt/dcmp</code>)</td>
+<td><code>group</code>, <code>user</code></td>
+</tr>
+<tr>
+<td><strong>Folders</strong></td>
+<td><code>/opt/dcmp</code> (0755), <code>/opt/dcmp/releases/&lt;version&gt;</code> (0755), <code>/var/lib/dcmp/data</code> (0750, H2 database), <code>/var/log/dcmp</code> (0755) – all owned by <code>dcmp</code></td>
+<td><code>file</code> (loop)</td>
+</tr>
+<tr>
+<td><strong>Files</strong></td>
+<td><code>/opt/dcmp/releases/&lt;version&gt;/app.war</code> (0640, from the Jenkins-built artefact); symlink <code>/opt/dcmp/current</code> → active release; <code>/etc/supervisor/conf.d/dcmp.conf</code> (service definition from a Jinja2 template)</td>
+<td><code>copy</code>, <code>file state=link</code>, <code>template</code></td>
+</tr>
+<tr>
+<td><strong>Ports</strong></td>
+<td>application listens on <strong>8080/tcp</strong> (published as 8093 on the lab host); sshd on 22/tcp for Ansible</td>
+<td><code>wait_for</code></td>
+</tr>
+<tr>
+<td><strong>Services</strong></td>
+<td><code>dcmp</code> runs under supervisor as user <code>dcmp</code>, auto-start and auto-restart, env <code>SPRING_PROFILES_ACTIVE</code>, <code>SPRING_DATASOURCE_URL=jdbc:h2:file:/var/lib/dcmp/data/dcmp</code></td>
+<td>handler <code>supervisorctl reread / update / restart</code></td>
+</tr>
+<tr>
+<td><strong>Verification</strong></td>
+<td><code>GET /actuator/health</code> must return 200 and contain <code>UP</code></td>
+<td><code>uri</code> with retries</td>
+</tr>
+</tbody>
+</table>
+<p>All tunable values (version, profile, port, folders, heap) are in <a href="../ansible/group_vars/all.yml"><code>ansible/group_vars/all.yml</code></a>.
+The deployed layout keeps one folder per version, so a previous release can be re-activated by repointing <code>current</code> (used in step 14).</p><div class="codehead">ansible/inventory/hosts.ini</div><pre class="code"># Target node(s) for the Device Compliance Management Portal.
+# In this lab the node is a container on the Docker network &quot;dcmp-net&quot;; on a real server only ansible_host changes.
+[dcmp_servers]
+dcmp-node ansible_host=dcmp-node
+
+[dcmp_servers:vars]
+ansible_user=ansible
+ansible_ssh_private_key_file=/root/.ssh/id_ed25519
+ansible_become=true
+</pre><div class="codehead">ansible/group_vars/all.yml (variables)</div><pre class="code">---
+# ---- Configuration specification (single place to change settings) ----
+app_name: dcmp
+app_user: dcmp
+app_group: dcmp
+app_version: &quot;1.0.6&quot;                    # release being deployed; each version gets its own folder
+app_env: dev                            # Spring profile (dev / qa)
+app_port: 8080                          # port the application listens on inside the node
+app_home: /opt/dcmp                     # /opt/dcmp/releases/&lt;version&gt;/app.war  +  /opt/dcmp/current -&gt; release
+data_dir: /var/lib/dcmp/data            # H2 database files
+log_dir: /var/log/dcmp
+java_heap: 256m
+
+# WAR built and tested by Jenkins (copied into ansible/artifacts/ by run.sh); path as seen from the control container
+war_src: &quot;/work/ansible/artifacts/app-{{ app_version }}.war&quot;
+
+os_packages:
+  - openjdk-11-jre-headless
+  - curl
+  - ca-certificates
+  - supervisor
+health_wait: 60                         # seconds to wait for the port after a deployment
+</pre><div class="codehead">ansible/templates/dcmp.conf.j2 (service definition)</div><pre class="code">; {{ ansible_managed }}
+[program:{{ app_name }}]
+command=/usr/bin/java -Xmx{{ java_heap }} -jar {{ app_home }}/current/app.war --server.port={{ app_port }}
+directory={{ app_home }}
+user={{ app_user }}
+environment=APP_VERSION=&quot;{{ release_label | default(app_version) }}&quot;,SPRING_PROFILES_ACTIVE=&quot;{{ app_env }}&quot;,SPRING_DATASOURCE_URL=&quot;jdbc:h2:file:{{ data_dir }}/dcmp;AUTO_SERVER=TRUE&quot;
+autostart=true
+autorestart=true
+startsecs=20
+stdout_logfile={{ log_dir }}/app.log
+stderr_logfile={{ log_dir }}/app-error.log
+</pre><div class="codehead">ansible/playbook.yml (current version, includes the step-14 rollback logic)</div><pre class="code">---
+# Steps 13-14 - configure / provision a server for the Device Compliance Management Portal.
+# * Idempotent: running it again on a configured node reports changed=0.
+# * Safe releases: each version lives in /opt/dcmp/releases/&lt;version&gt;; /opt/dcmp/current points at the active one.
+#   If the new release fails its health check the play restores the previous release automatically and then fails.
+- name: Provision Device Compliance Portal server
+  hosts: dcmp_servers
+  become: true
+
+  tasks:
+    # ---------------- packages ----------------
+    - name: Refresh apt cache (at most once per hour)
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Install prerequisite packages
+      ansible.builtin.apt:
+        name: &quot;{{ os_packages }}&quot;
+        state: present
+
+    # ---------------- user, folders ----------------
+    - name: Create application group
+      ansible.builtin.group:
+        name: &quot;{{ app_group }}&quot;
+        system: true
+
+    - name: Create unprivileged application user
+      ansible.builtin.user:
+        name: &quot;{{ app_user }}&quot;
+        group: &quot;{{ app_group }}&quot;
+        system: true
+        home: &quot;{{ app_home }}&quot;
+        create_home: false
+        shell: /usr/sbin/nologin
+
+    - name: Create application, release, data and log folders
+      ansible.builtin.file:
+        path: &quot;{{ item.path }}&quot;
+        state: directory
+        owner: &quot;{{ app_user }}&quot;
+        group: &quot;{{ app_group }}&quot;
+        mode: &quot;{{ item.mode }}&quot;
+      loop:
+        - { path: &quot;{{ app_home }}&quot;, mode: &quot;0755&quot; }
+        - { path: &quot;{{ app_home }}/releases&quot;, mode: &quot;0755&quot; }
+        - { path: &quot;{{ app_home }}/releases/{{ app_version }}&quot;, mode: &quot;0755&quot; }
+        - { path: &quot;{{ data_dir | dirname }}&quot;, mode: &quot;0755&quot; }
+        - { path: &quot;{{ data_dir }}&quot;, mode: &quot;0750&quot; }
+        - { path: &quot;{{ log_dir }}&quot;, mode: &quot;0755&quot; }
+
+    # ---------------- remember what is running now (for rollback) ----------------
+    - name: Look at the currently active release
+      ansible.builtin.stat:
+        path: &quot;{{ app_home }}/current&quot;
+      register: current_link
+
+    - name: Remember the previous release
+      ansible.builtin.set_fact:
+        previous_release: &quot;{{ current_link.stat.lnk_target | default(&#x27;&#x27;) if current_link.stat.islnk | default(false) else &#x27;&#x27; }}&quot;
+
+    - name: Show release change
+      ansible.builtin.debug:
+        msg: &quot;active release: &#x27;{{ previous_release | basename }}&#x27;  -&gt;  new release: &#x27;{{ app_version }}&#x27;&quot;
+
+    # ---------------- deploy the new release, with automatic rollback ----------------
+    - name: Deploy and verify release {{ app_version }}
+      block:
+        - name: Deploy the application WAR into its versioned release folder
+          ansible.builtin.copy:
+            src: &quot;{{ war_src }}&quot;
+            dest: &quot;{{ app_home }}/releases/{{ app_version }}/app.war&quot;
+            owner: &quot;{{ app_user }}&quot;
+            group: &quot;{{ app_group }}&quot;
+            mode: &quot;0640&quot;
+          notify: Apply service changes
+
+        - name: Point &#x27;current&#x27; at this release
+          ansible.builtin.file:
+            src: &quot;{{ app_home }}/releases/{{ app_version }}&quot;
+            dest: &quot;{{ app_home }}/current&quot;
+            state: link
+            owner: &quot;{{ app_user }}&quot;
+            group: &quot;{{ app_group }}&quot;
+          notify: Apply service changes
+
+        - name: Install the supervisor program definition for the application
+          ansible.builtin.template:
+            src: dcmp.conf.j2
+            dest: &quot;/etc/supervisor/conf.d/{{ app_name }}.conf&quot;
+            owner: root
+            group: root
+            mode: &quot;0644&quot;
+          notify: Apply service changes
+
+        - name: Apply pending service changes now (so the health check below tests the new release)
+          ansible.builtin.meta: flush_handlers
+
+        - name: Make sure the application service is running
+          ansible.builtin.command: supervisorctl status {{ app_name }}
+          register: svc_status
+          changed_when: false
+          failed_when: &quot;&#x27;RUNNING&#x27; not in svc_status.stdout and &#x27;STARTING&#x27; not in svc_status.stdout&quot;
+
+        - name: Wait until the application port is listening
+          ansible.builtin.wait_for:
+            host: 127.0.0.1
+            port: &quot;{{ app_port }}&quot;
+            timeout: &quot;{{ health_wait }}&quot;
+
+        - name: Health check
+          ansible.builtin.uri:
+            url: &quot;http://127.0.0.1:{{ app_port }}/actuator/health&quot;
+            return_content: true
+          register: health
+          retries: 6
+          delay: 5
+          until: health.status == 200 and &quot;UP&quot; in health.content
+
+        - name: Report result
+          ansible.builtin.debug:
+            msg: &quot;{{ app_name }} {{ app_version }} (env={{ app_env }}) is {{ health.json.status }} on port {{ app_port }}&quot;
+
+      rescue:
+        - name: &quot;ROLLBACK - release {{ app_version }} failed its health check&quot;
+          ansible.builtin.debug:
+            msg: &quot;restoring previous release &#x27;{{ previous_release | basename }}&#x27;&quot;
+
+        - name: Stop here if there is nothing to roll back to
+          ansible.builtin.fail:
+            msg: &quot;Release {{ app_version }} failed and there is no previous release to restore.&quot;
+          when: previous_release == &#x27;&#x27;
+
+        - name: Re-point &#x27;current&#x27; at the previous release
+          ansible.builtin.file:
+            src: &quot;{{ previous_release }}&quot;
+            dest: &quot;{{ app_home }}/current&quot;
+            state: link
+            owner: &quot;{{ app_user }}&quot;
+            group: &quot;{{ app_group }}&quot;
+
+        - name: Remove the failed release folder
+          ansible.builtin.file:
+            path: &quot;{{ app_home }}/releases/{{ app_version }}&quot;
+            state: absent
+
+        - name: Restore the service definition (so APP_VERSION names the release that is really running)
+          ansible.builtin.template:
+            src: dcmp.conf.j2
+            dest: &quot;/etc/supervisor/conf.d/{{ app_name }}.conf&quot;
+            owner: root
+            group: root
+            mode: &quot;0644&quot;
+          vars:
+            release_label: &quot;{{ previous_release | basename }}&quot;
+
+        - name: Restart the service on the previous release
+          ansible.builtin.shell: |
+            supervisorctl reread
+            supervisorctl update {{ app_name }}
+            supervisorctl restart {{ app_name }}
+          changed_when: true
+
+        - name: Health check after rollback
+          ansible.builtin.uri:
+            url: &quot;http://127.0.0.1:{{ app_port }}/actuator/health&quot;
+            return_content: true
+          register: recovered
+          retries: 12
+          delay: 5
+          until: recovered.status == 200 and &quot;UP&quot; in recovered.content
+
+        - name: Fail the play so the bad release is reported
+          ansible.builtin.fail:
+            msg: &quot;Release {{ app_version }} FAILED health check - rolled back to {{ previous_release | basename }} ({{ recovered.json.status }}).&quot;
+
+  handlers:
+    - name: Apply service changes
+      ansible.builtin.shell: |
+        supervisorctl reread
+        supervisorctl update {{ app_name }}
+        supervisorctl restart {{ app_name }}
+      changed_when: true
+</pre><figure><img src="shots/diagram_ansible.png"><figcaption>Figure 13.0 - Lab topology</figcaption></figure><figure><img src="shots/term_s13_first_run.png"><figcaption>Figure 13.1 - First execution: ok=14 changed=8 failed=0</figcaption></figure><figure><img src="shots/term_s13_second_run.png"><figcaption>Figure 13.2 - Second execution: changed=0</figcaption></figure>
+</section>
+<section class="step">
+<div class="stephead"><span class="num">STEP 14</span><h2>Automated Provisioning and Reliability Validation</h2></div>
+<div class="task"><b>Task given:</b> Provision a clean target environment for the Device Compliance Management Portal using Puppet/Ansible. Deploy the application or container, rerun the automation to demonstrate idempotency, perform a health check and test rollback/recovery to the previous stable release.</div>
+<div class="deliv"><b>Deliverable required:</b> Provisioned node, idempotency evidence, health-check result and rollback/recovery demonstration.</div>
+<p>A brand-new node was provisioned, the playbook was re-run to prove idempotency, health was checked, and several recovery scenarios were exercised. A bug found during this step (rollback restored the code but left the failed release's label) was fixed and re-tested. Source: <code>docs/14-provisioning-and-reliability.md</code>.</p>
+<table class="check"><tr><th>Deliverable required by the sheet</th><th>Shown in this report</th></tr><tr><td>Provisioned node</td><td>Figures 14.1-14.2</td></tr><tr><td>Idempotency evidence</td><td>Figure 14.3 (changed=0)</td></tr><tr><td>Health-check result</td><td>Figures 14.2, 14.4, 14.7</td></tr><tr><td>Rollback / recovery demonstration</td><td>Figures 14.5-14.9</td></tr></table>
+<figure><img src="shots/term_s14_0_clean.png"><figcaption>Figure 14.1 - Clean node before provisioning: no Java, no dcmp user, no /opt/dcmp</figcaption></figure><figure><img src="shots/term_s14_1-provision-1.0.6.png"><figcaption>Figure 14.2 - Provisioning release 1.0.6: ok=17 changed=8 failed=0, health UP</figcaption></figure><figure><img src="shots/term_s14_2-idempotency-rerun.png"><figcaption>Figure 14.3 - Re-run: ok=16 changed=0 (idempotent)</figcaption></figure><figure><img src="shots/term_s14_3-upgrade-1.0.7.png"><figcaption>Figure 14.4 - Upgrade to release 1.0.7 (active release 1.0.6 -&gt; 1.0.7), health UP</figcaption></figure><figure><img src="shots/app_20_home_ansible_node.png" style="max-width:70%"><figcaption>Figure 14.5 - Provisioned node: home page shows Release 1.0.7</figcaption></figure><figure><img src="shots/term_s14_4-bad-release-auto-rollback_p1.png"><figcaption>Figure 14.6 - Bad release 1.0.8: health check fails -&gt; automatic rollback to 1.0.7 (part 1)</figcaption></figure><figure><img src="shots/term_s14_4-bad-release-auto-rollback_p2.png"><figcaption>Figure 14.6 - Bad release 1.0.8: health check fails -&gt; automatic rollback to 1.0.7 (part 2)</figcaption></figure><figure><img src="shots/term_s14_5-manual-rollback-1.0.6.png"><figcaption>Figure 14.7 - Manual rollback to the earlier stable release 1.0.6</figcaption></figure><figure><img src="shots/term_s14_6_recovery.png"><figcaption>Figure 14.8 - Process crash (kill -9) and node reboot: service recovers by itself</figcaption></figure><figure><img src="shots/term_s14_7-final-1.0.7.png"><figcaption>Figure 14.9 - Final promotion of the latest stable release 1.0.7</figcaption></figure><figure><img src="shots/app_21_health_ansible_node.png" style="max-width:55%"><figcaption>Figure 14.10 - Health endpoint of the provisioned node (via published port 8093)</figcaption></figure><h4>6. Problem found and fixed during testing</h4>
+<p>The first attempt at scenario A (<code>step14-4a-first-attempt-label-bug.log</code>) did roll back the code and the app was healthy, but the home page
+still said <code>Release: 1.0.8</code>: the rollback restored the symlink but not the service definition, which still carried the failed release's
+<code>APP_VERSION</code> label. Fix: the <code>rescue</code> section now re-renders the service definition with the previous release label (variable <code>release_label</code>)
+before restarting. Re-test: page shows <code>Release: 1.0.7</code> after the failed deployment. (Note: Ansible extra-vars <code>-e app_version=…</code> always win over
+task-level <code>vars</code>, so a separate variable name was needed.)</p>
+</section></body></html>
