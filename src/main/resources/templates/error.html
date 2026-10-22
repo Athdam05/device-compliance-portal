@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Error')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: nav}"></div>
+<main class="container">
+  <div class="card hero">
+    <h1><span th:text="${status}">500</span> - <span th:text="${error}">Error</span></h1>
+    <p th:text="${message != null and !#strings.isEmpty(message)} ? ${message} : 'Something went wrong while handling this request.'">Something went wrong.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" th:href="@{/devices}">Back to devices</a>
+      <a class="btn" th:href="@{/}">Home</a>
+    </div>
+  </div>
+</main>
+</body>
+</html>

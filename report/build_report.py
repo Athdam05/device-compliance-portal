@@ -204,7 +204,7 @@ def build():
         + img("app_11_details_admin_view", "Figure 6.4 - Admin view of a device before any workflow action", "70%")
         + img("app_13_technician_moved_under_review", "Figure 6.5 - Technician moves REPORTED -> UNDER_REVIEW", "70%")
         + img("app_14_technician_remediated_history", "Figure 6.6 - Technician moves to REMEDIATED; history is recorded", "70%")
-        + img("app_15_auditor_can_close", "Figure 6.7 - Auditor sees the only allowed action: close", "70%")
+        + img("app_15_auditor_can_close", "Figure 6.7 - Auditor on a REMEDIATED device: may close it or reopen it (the technician has no action here)", "70%")
         + img("app_17_dashboard", "Figure 6.8 - Summary dashboard", "70%")
         + img("gh_pr3", "Figure 6.9a - PR #3 (feature/2) merged into develop")
         + img("gh_pr4", "Figure 6.9b - PR #4 (feature/3) merged after conflict resolution")

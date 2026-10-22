@@ -1,32 +1,47 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Devices</title></head>
+<head th:replace="~{fragments/layout :: head('Devices')}"></head>
 <body>
-  <h1>Devices</h1>
-  <p><a id="add-device" th:href="@{/devices/new}">Add device</a> | <a th:href="@{/dashboard}">Dashboard</a> | <a th:href="@{/}">Home</a> | <span id="who" th:text="${session.user.username} + ' (' + ${session.user.role} + ')'"></span>
-    <form th:action="@{/logout}" method="post" style="display:inline"><button id="logout" type="submit">Logout</button></form></p>
-  <form method="get" th:action="@{/devices}">
-    <input id="q" type="text" name="q" th:value="${q}" placeholder="Search name or owner"/>
-    <select id="status" name="status">
-      <option value="">All statuses</option>
-      <option th:each="s : ${T(java.util.List).of('REPORTED','UNDER_REVIEW','REMEDIATED','CLOSED')}"
-              th:value="${s}" th:text="${s}" th:selected="${s == status}"></option>
-    </select>
-    <button id="search" type="submit">Search</button>
+<div th:replace="~{fragments/layout :: nav}"></div>
+<main class="container">
+  <div class="page-head">
+    <div>
+      <h1>Devices</h1>
+      <p class="subtle">Registered devices and their compliance state</p>
+    </div>
+    <a id="add-device" class="btn btn-primary" th:href="@{/devices/new}">+ Add device</a>
+  </div>
+
+  <form class="card" method="get" th:action="@{/devices}">
+    <div class="search-row">
+      <input id="q" type="text" name="q" th:value="${q}" placeholder="Search name or owner"/>
+      <select id="status" name="status">
+        <option value="">All statuses</option>
+        <option th:each="s : ${T(java.util.List).of('REPORTED','UNDER_REVIEW','REMEDIATED','CLOSED')}"
+                th:value="${s}" th:text="${s}" th:selected="${s == status}"></option>
+      </select>
+      <button id="search" class="btn btn-primary" type="submit">Search</button>
+    </div>
   </form>
-  <table border="1" cellpadding="4">
-    <thead><tr><th>Name</th><th>Owner</th><th>OS</th><th>Compliance</th><th>Status</th><th></th></tr></thead>
-    <tbody>
-      <tr th:each="d : ${devices}">
-        <td><a th:href="@{/devices/{id}(id=${d.id})}" th:text="${d.name}">name</a></td>
-        <td th:text="${d.owner}">owner</td>
-        <td th:text="${d.os}">os</td>
-        <td th:text="${d.compliant} ? 'COMPLIANT' : 'NON_COMPLIANT'">c</td>
-        <td th:text="${d.workflowStatus}">s</td>
-        <td><a th:href="@{/devices/{id}/edit(id=${d.id})}">Edit</a></td>
-      </tr>
-      <tr th:if="${#lists.isEmpty(devices)}"><td colspan="6">No devices found.</td></tr>
-    </tbody>
-  </table>
+
+  <div class="card table-card">
+    <table>
+      <thead><tr><th>Name</th><th>Owner</th><th>OS</th><th>Compliance</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        <tr th:each="d : ${devices}">
+          <td><a th:href="@{/devices/{id}(id=${d.id})}" th:text="${d.name}">name</a></td>
+          <td th:text="${d.owner}">owner</td>
+          <td th:text="${d.os}">os</td>
+          <td><span class="badge" th:classappend="${d.compliant} ? 'badge-ok' : 'badge-bad'"
+                    th:text="${d.compliant} ? 'COMPLIANT' : 'NON_COMPLIANT'">c</span></td>
+          <td><span class="pill" th:classappend="'pill-' + ${#strings.toLowerCase(d.workflowStatus)}"
+                    th:text="${d.workflowStatus}">s</span></td>
+          <td><a th:href="@{/devices/{id}/edit(id=${d.id})}">Edit</a></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(devices)}"><td colspan="6" class="empty">No devices found.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</main>
 </body>
 </html>

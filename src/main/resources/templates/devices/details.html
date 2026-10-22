@@ -1,40 +1,64 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Device Details</title></head>
+<head th:replace="~{fragments/layout :: head('Device')}"></head>
 <body>
-  <h1 id="device-name" th:text="${device.name}">Name</h1>
-  <ul>
-    <li>Owner: <span th:text="${device.owner}"></span></li>
-    <li>Serial No: <span th:text="${device.serialNo}"></span></li>
-    <li>OS: <span th:text="${device.os}"></span></li>
-    <li>Antivirus: <span th:text="${device.antivirusEnabled}"></span></li>
-    <li>Disk encrypted: <span th:text="${device.diskEncrypted}"></span></li>
-    <li>Firewall: <span th:text="${device.firewallEnabled}"></span></li>
-    <li>Compliance: <span id="compliance" th:text="${device.compliant} ? 'COMPLIANT' : 'NON_COMPLIANT'"></span></li>
-    <li>Status: <span id="status" th:text="${device.workflowStatus}"></span></li>
-  </ul>
+<div th:replace="~{fragments/layout :: nav}"></div>
+<main class="container">
+  <div class="page-head">
+    <div>
+      <h1 id="device-name" th:text="${device.name}">Name</h1>
+      <p class="subtle">Device details and workflow</p>
+    </div>
+    <div>
+      <a class="btn" th:href="@{/devices/{id}/edit(id=${device.id})}">Edit</a>
+      <a class="btn" th:href="@{/devices}">Back to list</a>
+    </div>
+  </div>
 
-  <h2>Move status</h2>
-  <form th:each="next : ${@workflowService.nextStatuses(session.user.role, device.workflowStatus)}"
-        th:action="@{/devices/{id}/status(id=${device.id})}" method="post" style="display:inline">
-    <input type="hidden" name="to" th:value="${next}"/>
-    <button type="submit" th:id="'to-' + ${next}" th:text="'Move to ' + ${next}"></button>
-  </form>
-  <p th:if="${#lists.isEmpty(@workflowService.nextStatuses(session.user.role, device.workflowStatus))}">
-    No transitions available for your role.</p>
+  <div class="card">
+    <dl class="kv">
+      <dt>Owner</dt><dd th:text="${device.owner}"></dd>
+      <dt>Serial number</dt><dd th:text="${device.serialNo}"></dd>
+      <dt>Operating system</dt><dd th:text="${device.os}"></dd>
+      <dt>Antivirus</dt><dd th:text="${device.antivirusEnabled} ? 'Enabled' : 'Disabled'"></dd>
+      <dt>Disk encryption</dt><dd th:text="${device.diskEncrypted} ? 'Enabled' : 'Disabled'"></dd>
+      <dt>Firewall</dt><dd th:text="${device.firewallEnabled} ? 'Enabled' : 'Disabled'"></dd>
+      <dt>Compliance</dt>
+      <dd><span id="compliance" class="badge" th:classappend="${device.compliant} ? 'badge-ok' : 'badge-bad'"
+                th:text="${device.compliant} ? 'COMPLIANT' : 'NON_COMPLIANT'"></span></dd>
+      <dt>Workflow status</dt>
+      <dd><span id="status" class="pill" th:classappend="'pill-' + ${#strings.toLowerCase(device.workflowStatus)}"
+                th:text="${device.workflowStatus}"></span></dd>
+    </dl>
+  </div>
 
-  <h2>Status history</h2>
-  <table border="1" cellpadding="4">
-    <thead><tr><th>When</th><th>From</th><th>To</th><th>By</th></tr></thead>
-    <tbody>
-      <tr th:each="h : ${@statusHistoryRepository.findByDeviceIdOrderByChangedAtDesc(device.id)}">
-        <td th:text="${#temporals.format(h.changedAt, 'yyyy-MM-dd HH:mm')}"></td>
-        <td th:text="${h.fromStatus}"></td>
-        <td th:text="${h.toStatus}"></td>
-        <td th:text="${h.changedBy}"></td>
-      </tr>
-    </tbody>
-  </table>
-  <p><a th:href="@{/devices}">Back to list</a></p>
+  <div class="card">
+    <h2>Move status</h2>
+    <div class="moves">
+      <form th:each="next : ${@workflowService.nextStatuses(session.user.role, device.workflowStatus)}"
+            th:action="@{/devices/{id}/status(id=${device.id})}" method="post">
+        <input type="hidden" name="to" th:value="${next}"/>
+        <button type="submit" class="btn btn-move" th:id="'to-' + ${next}" th:text="'Move to ' + ${next}"></button>
+      </form>
+      <p class="note" th:if="${#lists.isEmpty(@workflowService.nextStatuses(session.user.role, device.workflowStatus))}">
+        No transitions available for your role.</p>
+    </div>
+  </div>
+
+  <div class="card table-card">
+    <div style="padding:18px 22px 6px"><h2>Status history</h2></div>
+    <table>
+      <thead><tr><th>When</th><th>From</th><th>To</th><th>By</th></tr></thead>
+      <tbody>
+        <tr th:each="h : ${@statusHistoryRepository.findByDeviceIdOrderByChangedAtDesc(device.id)}">
+          <td th:text="${#temporals.format(h.changedAt, 'yyyy-MM-dd HH:mm')}"></td>
+          <td th:text="${h.fromStatus}"></td>
+          <td th:text="${h.toStatus}"></td>
+          <td th:text="${h.changedBy}"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</main>
 </body>
 </html>

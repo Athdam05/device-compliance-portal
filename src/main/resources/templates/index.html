@@ -1,10 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Device Compliance Portal</title></head>
+<head th:replace="~{fragments/layout :: head('Home')}"></head>
 <body>
-  <h1>Automated Device Compliance Management Portal</h1>
-  <p>Environment: <strong id="environment" th:text="${environment}">LOCAL</strong>
-     | Release: <strong id="version" th:text="${version}">unknown</strong></p>
-  <p><a th:href="@{/devices}">Manage devices</a> | <a th:href="@{/dashboard}">Dashboard</a></p>
+<div th:replace="~{fragments/layout :: nav}"></div>
+<main class="container">
+  <div class="card hero">
+    <h1>Automated Device Compliance Management Portal</h1>
+    <p>Register devices, check them against security rules and track every problem through a role-based workflow until it is fixed.</p>
+    <div class="chips">
+      <span class="chip">Environment: <strong id="environment" th:text="${environment}">LOCAL</strong></span>
+      <span class="chip">Release: <strong id="version" th:text="${version}">unknown</strong></span>
+    </div>
+    <div class="hero-actions">
+      <a class="btn btn-primary" th:href="@{/devices}">Manage devices</a>
+      <a class="btn" th:href="@{/dashboard}">Dashboard</a>
+    </div>
+  </div>
+</main>
 </body>
 </html>

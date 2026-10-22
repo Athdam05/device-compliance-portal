@@ -11,3 +11,5 @@ ansible/logs/*.tmp
 !ansible/logs/*.log
 report/_preview/
 report/__pycache__/
+report/_guide.html
+report/_ui/
