@@ -1,13 +1,26 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Login</title></head>
+<head th:replace="~{fragments/layout :: head('Login')}"></head>
 <body>
-  <h1>Login</h1>
-  <p id="login-error" th:if="${error}" th:text="${error}"></p>
-  <form th:action="@{/login}" method="post">
-    <p>Username: <input id="username" type="text" name="username"/></p>
-    <p>Password: <input id="password" type="password" name="password"/></p>
-    <p><button id="login" type="submit">Login</button></p>
-  </form>
+<div th:replace="~{fragments/layout :: nav}"></div>
+<main class="container">
+  <div class="card auth">
+    <h1>Sign in</h1>
+    <p class="subtle">Use one of the demo accounts to continue.</p>
+    <p id="login-error" class="alert" th:if="${error}" th:text="${error}"></p>
+    <form th:action="@{/login}" method="post">
+      <div class="field">
+        <label for="username">Username</label>
+        <input id="username" type="text" name="username" autofocus/>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" type="password" name="password"/>
+      </div>
+      <button id="login" class="btn btn-primary" type="submit">Login</button>
+    </form>
+    <p class="demo-hint">Demo roles: <code>admin</code> (everything), <code>tech</code> (technician), <code>auditor</code> (auditor).</p>
+  </div>
+</main>
 </body>
 </html>

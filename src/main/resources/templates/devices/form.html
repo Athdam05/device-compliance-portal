@@ -1,22 +1,52 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Device Form</title></head>
+<head th:replace="~{fragments/layout :: head('Device form')}"></head>
 <body>
-  <h1 th:text="${device.id == null} ? 'Register Device' : 'Edit Device'">Register Device</h1>
-  <form th:action="${device.id == null} ? @{/devices} : @{/devices/{id}(id=${device.id})}"
+<div th:replace="~{fragments/layout :: nav}"></div>
+<main class="container">
+  <div class="page-head">
+    <div>
+      <h1 th:text="${device.id == null} ? 'Register Device' : 'Edit Device'">Register Device</h1>
+      <p class="subtle">Name, owner, serial number and the three security controls</p>
+    </div>
+  </div>
+  <form class="card" th:action="${device.id == null} ? @{/devices} : @{/devices/{id}(id=${device.id})}"
         th:object="${device}" method="post">
-    <p>Name: <input id="name" type="text" th:field="*{name}"/>
-       <span id="name-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span></p>
-    <p>Owner: <input id="owner" type="text" th:field="*{owner}"/>
-       <span th:if="${#fields.hasErrors('owner')}" th:errors="*{owner}"></span></p>
-    <p>Serial No: <input id="serialNo" type="text" th:field="*{serialNo}"/>
-       <span th:if="${#fields.hasErrors('serialNo')}" th:errors="*{serialNo}"></span></p>
-    <p>OS: <input id="os" type="text" th:field="*{os}"/>
-       <span th:if="${#fields.hasErrors('os')}" th:errors="*{os}"></span></p>
-    <p><label><input type="checkbox" th:field="*{antivirusEnabled}"/> Antivirus enabled</label></p>
-    <p><label><input type="checkbox" th:field="*{diskEncrypted}"/> Disk encrypted</label></p>
-    <p><label><input type="checkbox" th:field="*{firewallEnabled}"/> Firewall enabled</label></p>
-    <p><button id="save" type="submit">Save</button> <a th:href="@{/devices}">Cancel</a></p>
+    <div class="form-grid">
+      <div class="field">
+        <label for="name">Name</label>
+        <input id="name" type="text" th:field="*{name}"/>
+        <span id="name-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+      </div>
+      <div class="field">
+        <label for="owner">Owner</label>
+        <input id="owner" type="text" th:field="*{owner}"/>
+        <span class="error" th:if="${#fields.hasErrors('owner')}" th:errors="*{owner}"></span>
+      </div>
+      <div class="field">
+        <label for="serialNo">Serial number</label>
+        <input id="serialNo" type="text" th:field="*{serialNo}"/>
+        <span class="error" th:if="${#fields.hasErrors('serialNo')}" th:errors="*{serialNo}"></span>
+      </div>
+      <div class="field">
+        <label for="os">Operating system</label>
+        <input id="os" type="text" th:field="*{os}"/>
+        <span class="error" th:if="${#fields.hasErrors('os')}" th:errors="*{os}"></span>
+      </div>
+      <div class="field full">
+        <label>Security controls</label>
+        <div class="checks">
+          <label><input type="checkbox" th:field="*{antivirusEnabled}"/> Antivirus enabled</label>
+          <label><input type="checkbox" th:field="*{diskEncrypted}"/> Disk encrypted</label>
+          <label><input type="checkbox" th:field="*{firewallEnabled}"/> Firewall enabled</label>
+        </div>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button id="save" class="btn btn-primary" type="submit">Save</button>
+      <a class="btn btn-link" th:href="@{/devices}">Cancel</a>
+    </div>
   </form>
+</main>
 </body>
 </html>

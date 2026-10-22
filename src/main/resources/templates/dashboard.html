@@ -1,20 +1,32 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Dashboard</title></head>
+<head th:replace="~{fragments/layout :: head('Dashboard')}"></head>
 <body>
-  <h1>Compliance Dashboard</h1>
-  <p><a th:href="@{/devices}">Devices</a> | <a th:href="@{/}">Home</a></p>
-  <ul>
-    <li>Total devices: <span id="total" th:text="${total}">0</span></li>
-    <li>Compliant: <span id="compliant" th:text="${compliant}">0</span></li>
-    <li>Non-compliant: <span id="non-compliant" th:text="${nonCompliant}">0</span></li>
-  </ul>
-  <h2>By workflow status</h2>
-  <ul>
-    <li>Reported: <span th:text="${reported}">0</span></li>
-    <li>Under review: <span th:text="${underReview}">0</span></li>
-    <li>Remediated: <span th:text="${remediated}">0</span></li>
-    <li>Closed: <span th:text="${closed}">0</span></li>
-  </ul>
+<div th:replace="~{fragments/layout :: nav}"></div>
+<main class="container">
+  <div class="page-head">
+    <div>
+      <h1>Compliance Dashboard</h1>
+      <p class="subtle">Summary of all registered devices</p>
+    </div>
+    <a class="btn" th:href="@{/devices}">View devices</a>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><span class="num" id="total" th:text="${total}">0</span><span class="lbl">Total devices</span></div>
+    <div class="stat ok"><span class="num" id="compliant" th:text="${compliant}">0</span><span class="lbl">Compliant</span></div>
+    <div class="stat bad"><span class="num" id="non-compliant" th:text="${nonCompliant}">0</span><span class="lbl">Non-compliant</span></div>
+  </div>
+
+  <div class="card">
+    <h2>By workflow status</h2>
+    <div class="stats4">
+      <div class="mini"><span class="num" th:text="${reported}">0</span><span class="lbl">Reported</span></div>
+      <div class="mini"><span class="num" th:text="${underReview}">0</span><span class="lbl">Under review</span></div>
+      <div class="mini"><span class="num" th:text="${remediated}">0</span><span class="lbl">Remediated</span></div>
+      <div class="mini"><span class="num" th:text="${closed}">0</span><span class="lbl">Closed</span></div>
+    </div>
+  </div>
+</main>
 </body>
 </html>
